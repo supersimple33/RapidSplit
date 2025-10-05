@@ -1,5 +1,5 @@
 {
-  "originHash" : "1af5ba98694142f5330a904a1a6ff4b9cd7d43958f98bfea075b2177dd9b0a82",
+  "originHash" : "05a6674d0f880c8444973f61a5b8164b277dd1ec3d6c4b945739e823b38b614a",
   "pins" : [
     {
       "identity" : "camera",
@@ -13,10 +13,10 @@
     {
       "identity" : "materialuikit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/aumChauhan/MaterialUIKit.git",
+      "location" : "https://github.com/supersimple33/MaterialUIKit.git",
       "state" : {
-        "revision" : "2f49b551d9a416d28f9432db3ca9274a54df8a63",
-        "version" : "2.0.0"
+        "branch" : "vstackTabBar",
+        "revision" : "4992a83941627acf521a767984ea20fb7959ec38"
       }
     },
     {
