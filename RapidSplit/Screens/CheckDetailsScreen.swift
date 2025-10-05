@@ -10,6 +10,7 @@ import SwiftData
 import MaterialUIKit
 
 struct CheckDetailsScreen: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(Router.self) private var router
 
     var check: Check
@@ -51,6 +52,15 @@ struct CheckDetailsScreen: View {
                 .tabBarItem(tab: .participants, selection: $selectedTab)
             ItemAssignmentScreen(check: check, showContinue: false)
                 .tabBarItem(tab: .assignment, selection: $selectedTab)
+        }
+        .snackbar(isPresented: $showSnackbar, message: snackbarMessage)
+        .task(id: selectedTab) {
+            do {
+                try modelContext.save()
+            } catch let error {
+                snackbarMessage = "Failed to save changes: \(error.localizedDescription)"
+                showSnackbar = true
+            }
         }
     }
 }
