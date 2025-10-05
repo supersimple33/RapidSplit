@@ -14,6 +14,7 @@ struct ItemAssignmentScreen: View {
     @Environment(Router.self) private var router
 
     let check: Check
+    let showContinue: Bool
 
     @State private var showSnackbar = false
     @State private var snackbarMessage: String = ""
@@ -21,14 +22,16 @@ struct ItemAssignmentScreen: View {
     var body: some View {
         Container {
             AssignmentTable(check: check)
-            ActionButton("Finish Assignment", style: .filledStretched) {
-                do {
-                    try modelContext.save()
-                } catch let error {
-                    snackbarMessage = error.localizedDescription
-                    showSnackbar = true
+            if showContinue {
+                ActionButton("Finish Assignment", style: .filledStretched) {
+                    do {
+                        try modelContext.save()
+                    } catch let error {
+                        snackbarMessage = error.localizedDescription
+                        showSnackbar = true
+                    }
+                    router.jumpToCheck(check: check)
                 }
-                router.jumpToCheck(check: check)
             }
         }
     }
@@ -45,7 +48,7 @@ struct ItemAssignmentScreen: View {
     descriptor.sortBy = [SortDescriptor(\Check.name, order: .forward)]
     let fetchedCheck = try! context.fetch(descriptor).first!
 
-    return ItemAssignmentScreen(check: fetchedCheck)
+    return ItemAssignmentScreen(check: fetchedCheck, showContinue: true)
         .environment(Router())
         .modelContainer(container)
 }

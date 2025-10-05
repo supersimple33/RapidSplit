@@ -14,6 +14,7 @@ struct IdentifyParticipantsScreen: View {
     @Environment(Router.self) private var router
 
     let check: Check
+    let showContinue: Bool
 
     @State private var showContactPicker: Bool = false
     @State private var showParticipantBuilder: Bool = false
@@ -48,17 +49,19 @@ struct IdentifyParticipantsScreen: View {
                 self.newPhoneNumber = ""
                 self.showParticipantBuilder = true
             }
-            ActionButton("Continue", style: check.participants.isEmpty ? .outlineStretched : .filledStretched) {
-                do {
-                    for participant in check.participants {
-                        try participant.validate()
+            if (showContinue) {
+                ActionButton("Continue", style: check.participants.isEmpty ? .outlineStretched : .filledStretched) {
+                    do {
+                        for participant in check.participants {
+                            try participant.validate()
+                        }
+                        router.navigateTo(route: .assignment(check: check))
+                    } catch let error {
+                        self.showSnackbar = true
+                        self.snackbarMessage = error.localizedDescription
                     }
-                    router.navigateTo(route: .assignment(check: check))
-                } catch let error {
-                    self.showSnackbar = true
-                    self.snackbarMessage = error.localizedDescription
-                }
-            }.disabled(check.participants.isEmpty)
+                }.disabled(check.participants.isEmpty)
+            }
         }
         .dialogSheet(isPresented: $showParticipantBuilder, {
             VStack {
@@ -132,6 +135,7 @@ struct IdentifyParticipantsScreen: View {
     descriptor.sortBy = [SortDescriptor(\Check.name, order: .forward)]
     let fetchedCheck = try! context.fetch(descriptor).first!
 
-    return IdentifyParticipantsScreen(check: fetchedCheck)
+    return IdentifyParticipantsScreen(check: fetchedCheck, showContinue: true)
+        .environment(Router())
         .modelContainer(container)
 }
