@@ -1,6 +1,8 @@
 # Receipt Split
 An open source app for splitting receipts, checks, and bills. Privacy first no external API or cloud calls; everything runs on device.
 
+![GitHub branch status](https://img.shields.io/github/checks-status/supersimple33/RapidSplit/main)
+
 ## Structure
 - RapidSplit
   - Components (Miscellaneous UI components)
