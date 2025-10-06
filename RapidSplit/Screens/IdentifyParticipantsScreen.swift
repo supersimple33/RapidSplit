@@ -49,7 +49,7 @@ struct IdentifyParticipantsScreen: View {
                 self.newPhoneNumber = ""
                 self.showParticipantBuilder = true
             }
-            if (showContinue) {
+            if showContinue {
                 ActionButton("Continue", style: check.participants.isEmpty ? .outlineStretched : .filledStretched) {
                     do {
                         for participant in check.participants {
