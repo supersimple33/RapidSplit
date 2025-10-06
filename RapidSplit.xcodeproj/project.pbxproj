@@ -644,10 +644,10 @@
 		};
 		FE3209E22E6CE60B00A214CA /* XCRemoteSwiftPackageReference "MaterialUIKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/supersimple33/MaterialUIKit.git";
+			repositoryURL = "https://github.com/aumChauhan/MaterialUIKit.git";
 			requirement = {
-				branch = vstackTabBar;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.1;
 			};
 		};
 		FED090A32E71D2F800CC3CC5 /* XCRemoteSwiftPackageReference "SwiftTabler" */ = {
