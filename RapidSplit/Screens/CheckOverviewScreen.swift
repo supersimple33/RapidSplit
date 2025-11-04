@@ -21,21 +21,12 @@ struct CheckOverviewScreen: View {
     @State private var snackbarMessage: String = ""
 
     var body: some View {
-        Container {
+        Group {
             if let check {
-                ItemsTable(check: check)
-                    .floatingActionButton(systemImage: "square.and.pencil", titleKey: "Add New Item") {
-                        check.items.append(
-                            Item(
-                                name: "New Item",
-                                price: 10.0,
-                                forCheck: self.check!
-                            )
-                        )
-                    }
-                ActionButton("Continue", style: check.items.isEmpty ? .outlineStretched : .filledStretched) {
-                    router.navigateTo(route: .participants(check: check))
-                }.disabled(check.items.isEmpty)
+                ItemsEditTab(check: check)
+            } else {
+                ProgressBar()
+                Text("Building check...")
             }
         }
         .task {
