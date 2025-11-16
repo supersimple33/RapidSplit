@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "A1963E88-F678-47E8-AE28-4A556712B82B",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:RapidSplit.xcodeproj",
+      "identifier" : "FE3209AA2E6CE0B800A214CA",
+      "name" : "RapidSplit"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:RapidSplit.xcodeproj",
+        "identifier" : "FE3209BB2E6CE0B900A214CA",
+        "name" : "RapidSplitTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:RapidSplit.xcodeproj",
+        "identifier" : "FE3209C52E6CE0B900A214CA",
+        "name" : "RapidSplitUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
