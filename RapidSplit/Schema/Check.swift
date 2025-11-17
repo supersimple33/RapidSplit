@@ -19,11 +19,11 @@ final class Check: Identifiable {
     static let maxNameLength: Int = 50
 
     // Domain-specific validation error
-    enum ValidationError: Error, LocalizedError, Equatable {
+    enum ValidationError: LocalizedError, Equatable {
         case emptyName
         case nameTooLong
 
-        var errorDescription: String? {
+        var errorDescription: String {
             switch self {
             case .emptyName:
                 return "Check name cannot be empty."

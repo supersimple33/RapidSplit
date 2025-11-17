@@ -44,7 +44,7 @@ struct CheckAnalysisScreen: View {
         case noRecognizedText
         case failedImageConversion
 
-        var errorDescription: String? {
+        var errorDescription: String {
             switch self {
             case .noRecognizedText:
                 return "No text was detected in the image."

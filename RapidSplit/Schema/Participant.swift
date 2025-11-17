@@ -21,12 +21,12 @@ final class Participant {
     @Relationship(deleteRule: .nullify, inverse: \Item.orderers) var items: [Item]
 
     // Domain-specific validation error
-    enum ValidationError: Error, LocalizedError, Equatable {
+    enum ValidationError: LocalizedError, Equatable {
         case emptyName
         case nameTooLong(name: String)
         case invalidPhoneNumber
 
-        var errorDescription: String? {
+        var errorDescription: String {
             switch self {
             case .emptyName:
                 return "Name fields must be populated"
