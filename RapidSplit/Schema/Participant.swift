@@ -24,7 +24,7 @@ final class Participant {
     enum ValidationError: Error, LocalizedError, Equatable {
         case emptyFirstName
         case emptyLastName
-        case nameTooLong(field: String, max: Int)
+        case nameTooLong(name: String)
         case invalidPhoneNumber
 
         var errorDescription: String? {
@@ -33,8 +33,8 @@ final class Participant {
                 return "First name cannot be empty."
             case .emptyLastName:
                 return "Last name cannot be empty."
-            case .nameTooLong(let field, let max):
-                return "\(field) is too long. Maximum length is \(max) characters."
+            case .nameTooLong(let name):
+                return "Name: \(name) is too long. Maximum length is \(maxNameLength) characters."
             case .invalidPhoneNumber:
                 return "Phone number is invalid."
             }
@@ -44,12 +44,15 @@ final class Participant {
     // Centralized constraints
     static let maxNameLength: Int = 50
 
-    private static func validateName(_ name: String) throws {
+    private static func validateAndFormatName(_ name: String) throws -> String {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+
         guard !trimmed.isEmpty else { throw ValidationError.emptyFirstName }
         guard trimmed.count <= Self.maxNameLength else {
-            throw ValidationError.nameTooLong(field: "Name", max: Self.maxNameLength)
+            throw ValidationError.nameTooLong(name: name)
         }
+
+        return trimmed
     }
 
     private static func validatePhoneNumber(_ phoneNumber: String) throws {
@@ -64,18 +67,16 @@ final class Participant {
         if let phoneNumber {
             try Participant.validatePhoneNumber(phoneNumber)
         }
-        try Participant.validateName(self.firstName)
-        try Participant.validateName(self.lastName)
+        _ = try Participant.validateAndFormatName(self.firstName)
+        _ = try Participant.validateAndFormatName(self.lastName)
     }
 
     // Throwing initializer that validates and normalizes input
     init(firstName: String, lastName: String, phoneNumber: String? = nil, check: Check) throws {
         // Validate names
-        let trimmedFirst = firstName.trimmingCharacters(in: .whitespacesAndNewlines)
-        try Participant.validateName(trimmedFirst)
+        let trimmedFirst = try Participant.validateAndFormatName(firstName)
 
-        let trimmedLast = lastName.trimmingCharacters(in: .whitespacesAndNewlines)
-        try Participant.validateName(trimmedLast)
+        let trimmedLast =  try Participant.validateAndFormatName(lastName)
 
         // Validate and normalize phone if provided
         if let phoneNumber {
