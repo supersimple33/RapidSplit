@@ -21,20 +21,27 @@ final class Item: Purchasable {
     var name: String
     var price: Decimal // cents
     @Relationship(deleteRule: .nullify) var orderers: [Participant]
-    var check: Check
+    @Relationship(deleteRule: .nullify, inverse: \Check.items) private var internal_check: Check?
 
-    init(name: String, price: Decimal, forCheck check: Check) {
+    var check: Check {
+        get throws {
+            guard let check = self.internal_check else {
+                throw MissingCheckError()
+            }
+            return check
+        }
+    }
+
+    init(name: String, price: Decimal) {
         self.name = name
         self.price = price
         self.orderers = []
-        self.check = check
     }
 
-    init(item: any Purchasable, forCheck check: Check) {
+    init(from item: any Purchasable) {
         self.name = item.name
         self.price = item.price
         self.orderers = []
-        self.check = check
     }
 }
 

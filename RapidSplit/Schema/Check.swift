@@ -12,8 +12,8 @@ import SwiftData
 final class Check: Identifiable {
     var createdAt: Date = Date()
     var name: String
-    @Relationship(deleteRule: .cascade, inverse: \Participant.check) var participants: [Participant]
-    @Relationship(deleteRule: .cascade, inverse: \Item.check) var items: [Item]
+    @Relationship(deleteRule: .cascade) var participants: [Participant]
+    @Relationship(deleteRule: .cascade) var items: [Item]
 
     // Centralized constraints
     static let maxNameLength: Int = 50
@@ -47,6 +47,10 @@ final class Check: Identifiable {
         self.participants = participants
         self.items = items
     }
+}
+
+struct MissingCheckError: LocalizedError {
+    let errorDescription = "The associated check no longer exists (DB Error)."
 }
 
 enum SortingOptions: String, CaseIterable {

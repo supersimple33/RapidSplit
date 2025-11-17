@@ -16,15 +16,25 @@ final class Participant {
     var firstName: String
     var lastName: String
     var phoneNumber: String?
-    var check: Check
     var payed: Bool
+    @Relationship(deleteRule: .nullify, inverse: \Check.participants) private var internal_check: Check?
     @Relationship(deleteRule: .nullify, inverse: \Item.orderers) var items: [Item]
+
+    var check: Check {
+        get throws {
+            guard let check = self.internal_check else {
+                throw MissingCheckError()
+            }
+            return check
+        }
+    }
 
     // Domain-specific validation error
     enum ValidationError: LocalizedError, Equatable {
         case emptyName
         case nameTooLong(name: String)
         case invalidPhoneNumber
+        case formattingDiscrepancy
 
         var errorDescription: String {
             switch self {
@@ -34,6 +44,8 @@ final class Participant {
                 return "Name: \(name) is too long. Maximum length is \(maxNameLength) characters."
             case .invalidPhoneNumber:
                 return "Phone number is invalid."
+            case .formattingDiscrepancy:
+                return "Finalized name can be further formatted."
             }
         }
     }
@@ -64,12 +76,17 @@ final class Participant {
         if let phoneNumber {
             try Participant.validatePhoneNumber(phoneNumber)
         }
-        _ = try Participant.validateAndFormatName(self.firstName)
-        _ = try Participant.validateAndFormatName(self.lastName)
+        guard try self.firstName == Participant.validateAndFormatName(self.firstName) else {
+            throw ValidationError.formattingDiscrepancy
+        }
+        guard try self.lastName == Participant.validateAndFormatName(self.lastName) else {
+            throw ValidationError.formattingDiscrepancy
+        }
+        _ = try self.check
     }
 
     // Throwing initializer that validates and normalizes input
-    init(firstName: String, lastName: String, phoneNumber: String? = nil, check: Check) throws {
+    init(firstName: String, lastName: String, phoneNumber: String? = nil) throws {
         // Validate names
         let trimmedFirst = try Participant.validateAndFormatName(firstName)
 
@@ -84,7 +101,6 @@ final class Participant {
         }
         self.firstName = trimmedFirst
         self.lastName = trimmedLast
-        self.check = check
         self.items = []
         self.payed = false
     }

@@ -19,7 +19,6 @@ struct ItemsEditTab: View {
                         Item(
                             name: "New Item",
                             price: 10.0,
-                            forCheck: self.check
                         )
                     )
                 }
