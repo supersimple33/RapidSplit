@@ -9,6 +9,15 @@
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:RapidSplit.xcodeproj",
+          "identifier" : "FE3209AA2E6CE0B800A214CA",
+          "name" : "RapidSplit"
+        }
+      ]
+    },
     "performanceAntipatternCheckerEnabled" : true,
     "targetForVariableExpansion" : {
       "containerPath" : "container:RapidSplit.xcodeproj",
