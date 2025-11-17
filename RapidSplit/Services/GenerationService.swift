@@ -26,11 +26,12 @@ actor GenerationService {
 
     func generateCheckStructure(
         recognizedStrings: [String],
-        onPartial: (@Sendable ([GeneratedItem.PartiallyGenerated], GeneratedContent) async -> Void)? = nil
+        onPartial: (@Sendable ([GeneratedItem.PartiallyGenerated], GeneratedContent) async -> Void)? = nil,
+        options: GenerationOptions = GenerationOptions()
     ) async throws -> [GeneratedItem] {
         let session = LanguageModelSession(model: .default, instructions: ITEMS_INSTRUCTIONS)
         let prompt = "Here is the scanned check:\n" + recognizedStrings.joined(separator: "\n")
-        let stream = session.streamResponse(to: prompt, generating: [GeneratedItem].self)
+        let stream = session.streamResponse(to: prompt, generating: [GeneratedItem].self, options: options)
 
         if let onPartial {
             for try await items in stream {
@@ -43,12 +44,13 @@ actor GenerationService {
     }
 
     func generateCheckTitle(
-        recognizedStrings: [String]
+        recognizedStrings: [String],
+        options: GenerationOptions = GenerationOptions()
     ) async throws -> String {
         let session = LanguageModelSession(model: .default, instructions: TITLE_INSTRUCTIONS)
         let prompt = "Here is the scanned check, what would be a good name for it?:\n" + recognizedStrings.joined(separator: "\n")
         return try await session
-            .streamResponse(to: prompt, generating: String.self, includeSchemaInPrompt: false)
+            .streamResponse(to: prompt, generating: String.self, includeSchemaInPrompt: false, options: options)
             .collect().content
     }
 }
