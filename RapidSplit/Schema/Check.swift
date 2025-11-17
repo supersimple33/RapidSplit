@@ -49,8 +49,18 @@ final class Check: Identifiable {
     }
 }
 
-struct MissingCheckError: LocalizedError {
-    let errorDescription = "The associated check no longer exists (DB Error)."
+enum CheckPartError: LocalizedError {
+    case missing
+    case mismatched
+
+    var errorDescription: String {
+        switch self {
+        case .missing:
+            return "The associated check is no longer exists (DB Error)."
+        case .mismatched:
+            return "The check associated with the item and participant differ."
+        }
+    }
 }
 
 enum SortingOptions: String, CaseIterable {

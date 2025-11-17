@@ -20,13 +20,13 @@ final class Item: Purchasable {
     var createdAt: Date = Date()
     var name: String
     var price: Decimal // cents
-    @Relationship(deleteRule: .nullify) var orderers: [Participant]
+    @Relationship(deleteRule: .nullify) private(set) var orderers: [Participant]
     @Relationship(deleteRule: .nullify, inverse: \Check.items) private var internal_check: Check?
 
     var check: Check {
         get throws {
             guard let check = self.internal_check else {
-                throw MissingCheckError()
+                throw CheckPartError.missing
             }
             return check
         }
@@ -42,6 +42,22 @@ final class Item: Purchasable {
         self.name = item.name
         self.price = item.price
         self.orderers = []
+    }
+
+    func addOrderer(_ participant: Participant) throws {
+        let prevCheck = try? participant.check
+        if prevCheck == nil {
+            try self.check.participants.append(participant)
+            self.orderers.append(participant)
+        } else if try prevCheck === self.check {
+            self.orderers.append(participant)
+        } else {
+            throw CheckPartError.mismatched
+        }
+    }
+
+    func removeOrderer(_ participant: Participant) {
+        self.orderers.removeAll(where: { $0 === participant })
     }
 }
 

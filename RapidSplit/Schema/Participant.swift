@@ -18,12 +18,12 @@ final class Participant {
     var phoneNumber: String?
     var payed: Bool
     @Relationship(deleteRule: .nullify, inverse: \Check.participants) private var internal_check: Check?
-    @Relationship(deleteRule: .nullify, inverse: \Item.orderers) var items: [Item]
+    @Relationship(deleteRule: .nullify, inverse: \Item.orderers) private(set) var items: [Item]
 
     var check: Check {
         get throws {
             guard let check = self.internal_check else {
-                throw MissingCheckError()
+                throw CheckPartError.missing
             }
             return check
         }
@@ -107,6 +107,18 @@ final class Participant {
 
     func getTotalCost() -> Decimal {
         return self.items.reduce(0) { $0 + $1.price }
+    }
+
+    func addItem(_ item: Item) throws {
+        let prevCheck = try? item.check
+        if prevCheck == nil {
+            try self.check.items.append(item)
+            self.items.append(item)
+        } else if try prevCheck === self.check {
+            self.items.append(item)
+        } else {
+            throw CheckPartError.mismatched
+        }
     }
 }
 

@@ -14,6 +14,7 @@ struct AssignmentTable: View {
     private typealias Sort = TablerSort<Item>
 
     @Bindable var check: Check
+    let linkParticipantAndItem: (Item, Participant) -> Void
 
     private var tablerConfig: TablerStackConfig<Item> {
         TablerStackConfig<Item>(
@@ -99,9 +100,9 @@ struct AssignmentTable: View {
                         item.orderers.contains(participant)
                     }, set: { on in
                         if on {
-                            item.orderers.append(participant)
+                            linkParticipantAndItem(item, participant)
                         } else {
-                            item.orderers.removeAll { $0 == participant }
+                            item.removeOrderer(participant)
                         }
                     })).toggleStyle(CheckboxStyle())
                 }

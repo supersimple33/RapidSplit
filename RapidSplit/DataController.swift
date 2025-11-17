@@ -22,9 +22,9 @@ class DataController {
 
 
             let item1 = Item(name: "Margherita Pizza", price: 12.99)
-            item1.orderers.append(alice)
+            try item1.addOrderer(alice)
             let item2 = Item(name: "Soda", price: 2.99)
-            item2.orderers.append(bob)
+            try item2.addOrderer(bob)
 
             check1.participants = [alice, bob]
             check1.items = [item1, item2]
@@ -36,11 +36,11 @@ class DataController {
             let dana = try Participant(firstName: "Dana", lastName: "Lee")
 
             let item3 = Item(name: "Burger", price: 14.99)
-            item3.orderers.append(charlie)
+            try item3.addOrderer(charlie)
             let item4 = Item(name: "Fries", price: 4.99)
-            item4.orderers.append(dana)
+            try item4.addOrderer(dana)
             let item5 = Item(name: "Milkshake", price: 5.99)
-            item5.orderers.append(charlie)
+            try item5.addOrderer(charlie)
 
             check2.participants = [charlie, dana]
             check2.items = [item3, item4, item5]

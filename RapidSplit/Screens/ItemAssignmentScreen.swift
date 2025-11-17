@@ -21,7 +21,14 @@ struct ItemAssignmentScreen: View {
 
     var body: some View {
         Container {
-            AssignmentTable(check: check)
+            AssignmentTable(check: check) { item, participant in
+                do {
+                    try item.addOrderer(participant)
+                } catch let error {
+                    snackbarMessage = error.localizedDescription
+                    showSnackbar = true
+                }
+            }
             if showContinue {
                 ActionButton("Finish Assignment", style: .filledStretched) {
                     do {
