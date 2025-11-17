@@ -19,16 +19,16 @@ final class Check: Identifiable {
     static let maxNameLength: Int = 50
 
     // Domain-specific validation error
-    private enum ValidationError: Error, LocalizedError, Equatable {
+    enum ValidationError: Error, LocalizedError, Equatable {
         case emptyName
-        case nameTooLong(max: Int)
+        case nameTooLong
 
         var errorDescription: String? {
             switch self {
             case .emptyName:
                 return "Check name cannot be empty."
-            case .nameTooLong(let max):
-                return "Check name is too long. Maximum length is \(max) characters."
+            case .nameTooLong:
+                return "Check name is too long. Maximum length is \(maxNameLength) characters."
             }
         }
     }
@@ -40,7 +40,7 @@ final class Check: Identifiable {
             throw ValidationError.emptyName
         }
         guard trimmedName.count <= Self.maxNameLength else {
-            throw ValidationError.nameTooLong(max: Self.maxNameLength)
+            throw ValidationError.nameTooLong
         }
 
         self.name = trimmedName
