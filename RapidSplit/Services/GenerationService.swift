@@ -8,13 +8,13 @@
 import Foundation
 import FoundationModels
 
-let ITEMS_INSTRUCTIONS = """
+fileprivate let ITEMS_INSTRUCTIONS = """
 Please sort this description of the check into items using the supplied guidelines.
 Please ignore any junk descriptions such as the name of the merchant and any tax information
 or information about coupons or surveys. Be sure to include prices formatted as doubles ie ($1.15=1.15)
 """
 
-let TITLE_INSTRUCTIONS = """
+fileprivate let TITLE_INSTRUCTIONS = """
 Please generate a title for this check it should only be a few words long such as Five Guys Lunch or Subway Catering.
 Only output the title and nothing else.
 """
