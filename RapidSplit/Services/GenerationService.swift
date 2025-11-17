@@ -12,6 +12,8 @@ fileprivate let ITEMS_INSTRUCTIONS = """
 Please sort this description of the check into items using the supplied guidelines.
 Please ignore any junk descriptions such as the name of the merchant and any tax information
 or information about coupons or surveys. Be sure to include prices formatted as doubles ie ($1.15=1.15)
+Do not divide the price of items by the quanity but rather set the price for all of them total. ie (if you have
+5 items priced at $15 set the price to $15 rather than $3.
 """
 
 fileprivate let TITLE_INSTRUCTIONS = """
