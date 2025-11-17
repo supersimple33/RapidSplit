@@ -22,17 +22,14 @@ final class Participant {
 
     // Domain-specific validation error
     enum ValidationError: Error, LocalizedError, Equatable {
-        case emptyFirstName
-        case emptyLastName
+        case emptyName
         case nameTooLong(name: String)
         case invalidPhoneNumber
 
         var errorDescription: String? {
             switch self {
-            case .emptyFirstName:
-                return "First name cannot be empty."
-            case .emptyLastName:
-                return "Last name cannot be empty."
+            case .emptyName:
+                return "Name fields must be populated"
             case .nameTooLong(let name):
                 return "Name: \(name) is too long. Maximum length is \(maxNameLength) characters."
             case .invalidPhoneNumber:
@@ -47,7 +44,7 @@ final class Participant {
     private static func validateAndFormatName(_ name: String) throws -> String {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        guard !trimmed.isEmpty else { throw ValidationError.emptyFirstName }
+        guard !trimmed.isEmpty else { throw ValidationError.emptyName }
         guard trimmed.count <= Self.maxNameLength else {
             throw ValidationError.nameTooLong(name: name)
         }
