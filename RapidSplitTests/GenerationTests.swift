@@ -11,11 +11,10 @@ import FoundationModels
 
 fileprivate let TEST_CHECKS = [
     [
-        "McDonalds Check",
+        "McDonalds Order",
         "BigMac $5.49",
         "McNugget Meal $10.99",
         "2 McChicken Entree $7.98",
-        ""
     ],
     [
         "Sonic Drive-In",
@@ -42,7 +41,11 @@ struct GenerationTests {
 
     private let options = GenerationOptions(temperature: 0.0)
 
-    @Test("Title Generation", arguments: zip(TEST_CHECKS,["McDonald's Meal Check", "Sonic Feast", "Chipotle Meal"]))
+    @Test("Title Generation", arguments: zip(TEST_CHECKS, [
+        "McDonald's Meal Order",
+        "Sonic Drive-In Feast",
+        "Chipotle Meal"
+    ]))
     func testGenerateTitle(lines: [String], expectedTitle: String) async throws {
         let title = try await GenerationService.shared.generateCheckTitle(
             recognizedStrings: lines,
@@ -51,29 +54,7 @@ struct GenerationTests {
         #expect(title == expectedTitle)
     }
 
-    @Test("Item Generation Streaming", arguments: TEST_CHECKS)
-    func testReportingPartialItems(lines: [String]) async throws {
-        try #require(lines.count > 2) // There are two extra lines (title and total)
-
-        actor SnapshotBuffer {
-            private(set) var snapshots: [[GeneratedItem.PartiallyGenerated]] = []
-            func append(_ value: [GeneratedItem.PartiallyGenerated]) {
-                snapshots.append(value)
-            }
-        }
-        let buffer = SnapshotBuffer()
-
-        // Expectation: we should receive at least one partial update before completion
-        _ = try await GenerationService.shared
-            .generateCheckStructure(recognizedStrings: lines, onPartial: { partialItems, content in
-            await buffer.append(partialItems)
-        }, options: self.options)
-
-        let received = await buffer.snapshots.count
-        #expect(received >= lines.count - 2, "Expected at least one partial update per line, got \(received)")
-    }
-
-    @Test("Item Generation Structure", arguments: zip(TEST_CHECKS, [
+    @Test("Item Generation", arguments: zip(TEST_CHECKS, [
         [
             GeneratedItem(name: "BigMac", price: 5.49, quantity: 1),
             GeneratedItem(name: "McNugget Meal", price: 10.99, quantity: 1),
@@ -96,10 +77,25 @@ struct GenerationTests {
         ]
     ]))
     func testItemGenerationStructure(lines: [String], expectedItems: [GeneratedItem]) async throws {
+        actor SnapshotBuffer {
+            private(set) var snapshots: [[GeneratedItem.PartiallyGenerated]] = []
+            func append(_ value: [GeneratedItem.PartiallyGenerated]) {
+                snapshots.append(value)
+            }
+        }
+        let buffer = SnapshotBuffer()
+
         let generatedItems = try await GenerationService.shared.generateCheckStructure(
             recognizedStrings: lines,
+            onPartial: { partialItems, content in
+                await buffer.append(partialItems)
+            },
             options: self.options
         )
+
+        let updatesReceived = await buffer.snapshots.count
+        #expect(updatesReceived >= expectedItems.count, "Expected one update per item, got \(updatesReceived)")
+
         try #require(generatedItems.count == expectedItems.count)
         for (generatedItem, expectedItem) in zip(generatedItems,expectedItems) {
             #expect(generatedItem == expectedItem)
