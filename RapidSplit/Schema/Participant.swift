@@ -45,7 +45,7 @@ final class Participant {
             case .invalidPhoneNumber:
                 return "Phone number is invalid."
             case .formattingDiscrepancy:
-                return "Finalized name can be further formatted."
+                return "Name contains extra whitespace. Please remove leading/trailing spaces."
             }
         }
     }
@@ -90,7 +90,7 @@ final class Participant {
         // Validate names
         let trimmedFirst = try Participant.validateAndFormatName(firstName)
 
-        let trimmedLast =  try Participant.validateAndFormatName(lastName)
+        let trimmedLast = try Participant.validateAndFormatName(lastName)
 
         // Validate and normalize phone if provided
         if let phoneNumber {

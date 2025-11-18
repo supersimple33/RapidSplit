@@ -97,7 +97,7 @@ struct GenerationTests {
         #expect(updatesReceived >= expectedItems.count, "Expected one update per item, got \(updatesReceived)")
 
         try #require(generatedItems.count == expectedItems.count)
-        for (generatedItem, expectedItem) in zip(generatedItems,expectedItems) {
+        for (generatedItem, expectedItem) in zip(generatedItems, expectedItems) {
             #expect(generatedItem == expectedItem)
         }
     }

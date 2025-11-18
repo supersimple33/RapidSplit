@@ -56,7 +56,7 @@ enum CheckPartError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .missing:
-            return "The associated check is no longer exists (DB Error)."
+            return "The associated check no longer exists (DB Error)."
         case .mismatched:
             return "The check associated with the item and participant differ."
         }
