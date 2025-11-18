@@ -47,7 +47,7 @@
 		FE3209AB2E6CE0B800A214CA /* RapidSplit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RapidSplit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE3209BC2E6CE0B900A214CA /* RapidSplitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RapidSplitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE3209C62E6CE0B900A214CA /* RapidSplitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RapidSplitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FE628FA92ECA8484009F236B /* RapidSplit.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = file; path = RapidSplit.xctestplan; sourceTree = "<group>"; };
+		FE628FA92ECA8484009F236B /* RapidSplit.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RapidSplit.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
