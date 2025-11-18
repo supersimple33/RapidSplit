@@ -41,7 +41,7 @@ struct GenerationTests {
 
     private let options = GenerationOptions(temperature: 0.0)
 
-    @Test("Title Generation", arguments: zip(TEST_CHECKS, [
+    @Test("Title Generation", .enabled(if: !IS_RUNNING_IN_CLOUD), arguments: zip(TEST_CHECKS, [
         "McDonald's Meal Order",
         "Sonic Drive-In Feast",
         "Chipotle Meal"
@@ -54,7 +54,7 @@ struct GenerationTests {
         #expect(title == expectedTitle)
     }
 
-    @Test("Item Generation", arguments: zip(TEST_CHECKS, [
+    @Test("Item Generation", .enabled(if: !IS_RUNNING_IN_CLOUD), arguments: zip(TEST_CHECKS, [
         [
             GeneratedItem(name: "BigMac", price: 5.49, quantity: 1),
             GeneratedItem(name: "McNugget Meal", price: 10.99, quantity: 1),
