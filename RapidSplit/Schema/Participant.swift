@@ -36,7 +36,7 @@ final class Participant {
         case invalidPhoneNumber
         case formattingDiscrepancy
 
-        var errorDescription: String {
+        var errorDescription: String? {
             switch self {
             case .emptyName:
                 return "Name fields must be populated"

@@ -23,7 +23,7 @@ final class Check: Identifiable {
         case emptyName
         case nameTooLong
 
-        var errorDescription: String {
+        var errorDescription: String? {
             switch self {
             case .emptyName:
                 return "Check name cannot be empty."
@@ -53,7 +53,7 @@ enum CheckPartError: LocalizedError {
     case missing
     case mismatched
 
-    var errorDescription: String {
+    var errorDescription: String? {
         switch self {
         case .missing:
             return "The associated check is no longer exists (DB Error)."

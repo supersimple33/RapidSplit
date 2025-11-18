@@ -29,7 +29,7 @@ struct IdentifyParticipantsScreen: View {
     private enum IdentifyParticipantsError: LocalizedError {
         case regionNotSet
 
-        var errorDescription: String {
+        var errorDescription: String? {
             switch self {
             case .regionNotSet:
                 return "No region is set for the current locale."
