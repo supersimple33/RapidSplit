@@ -23,7 +23,7 @@ struct CheckOverviewScreen: View {
     var body: some View {
         Group {
             if let check {
-                ItemsEditTab(check: check)
+                ItemsEditTab(check: check, showContinue: true).environment(router)
             } else {
                 ProgressBar()
                 Text("Building check...")
