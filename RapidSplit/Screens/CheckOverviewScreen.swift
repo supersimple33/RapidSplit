@@ -23,7 +23,7 @@ struct CheckOverviewScreen: View {
     var body: some View {
         Group {
             if let check {
-                ItemsEditTab(check: check)
+                ItemsEditTab(check: check, showContinue: true).environment(router)
             } else {
                 ProgressBar()
                 Text("Building check...")
@@ -43,16 +43,13 @@ struct CheckOverviewScreen: View {
 
             for generatedItem in items {
                 if generatedItem.quantity == 1 {
-                    modelContext.insert(
-                        Item(item: generatedItem, forCheck: self.check!)
-                    )
+                    self.check!.items.append(Item(from: generatedItem))
                 } else {
                     for i in 1...generatedItem.quantity {
-                        modelContext.insert(
+                        self.check!.items.append(
                             Item(
                                 name: generatedItem.name + " #\(i)/\(generatedItem.quantity)",
                                 price: generatedItem.price / Decimal(generatedItem.quantity),
-                                forCheck: self.check!
                             )
                         )
                     }

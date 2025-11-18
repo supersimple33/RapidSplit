@@ -12,23 +12,23 @@ import SwiftData
 final class Check: Identifiable {
     var createdAt: Date = Date()
     var name: String
-    @Relationship(deleteRule: .cascade, inverse: \Participant.check) var participants: [Participant]
-    @Relationship(deleteRule: .cascade, inverse: \Item.check) var items: [Item]
+    @Relationship(deleteRule: .cascade) var participants: [Participant]
+    @Relationship(deleteRule: .cascade) var items: [Item]
 
     // Centralized constraints
     static let maxNameLength: Int = 50
 
     // Domain-specific validation error
-    private enum ValidationError: Error, LocalizedError, Equatable {
+    enum ValidationError: LocalizedError, Equatable {
         case emptyName
-        case nameTooLong(max: Int)
+        case nameTooLong
 
         var errorDescription: String? {
             switch self {
             case .emptyName:
                 return "Check name cannot be empty."
-            case .nameTooLong(let max):
-                return "Check name is too long. Maximum length is \(max) characters."
+            case .nameTooLong:
+                return "Check name is too long. Maximum length is \(maxNameLength) characters."
             }
         }
     }
@@ -40,7 +40,7 @@ final class Check: Identifiable {
             throw ValidationError.emptyName
         }
         guard trimmedName.count <= Self.maxNameLength else {
-            throw ValidationError.nameTooLong(max: Self.maxNameLength)
+            throw ValidationError.nameTooLong
         }
 
         self.name = trimmedName
@@ -49,19 +49,16 @@ final class Check: Identifiable {
     }
 }
 
-enum SortingOptions: String, CaseIterable {
-    case name = "Name"
-    case date = "Date"
-    case none = "None"
+enum CheckPartError: LocalizedError {
+    case missing
+    case mismatched
 
-    var sortDescriptors: [SortDescriptor<Check>] {
+    var errorDescription: String? {
         switch self {
-        case .name:
-            [SortDescriptor(\Check.name, order: .reverse)]
-        case .date:
-            [SortDescriptor(\Check.createdAt)]
-        case .none:
-            []
+        case .missing:
+            return "The associated check no longer exists (DB Error)."
+        case .mismatched:
+            return "The check associated with the item and participant differ."
         }
     }
 }

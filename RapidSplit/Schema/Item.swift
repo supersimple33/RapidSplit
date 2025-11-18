@@ -20,21 +20,44 @@ final class Item: Purchasable {
     var createdAt: Date = Date()
     var name: String
     var price: Decimal // cents
-    @Relationship(deleteRule: .nullify) var orderers: [Participant]
-    var check: Check
+    @Relationship(deleteRule: .nullify) private(set) var orderers: [Participant]
+    @Relationship(deleteRule: .nullify, inverse: \Check.items) private var internal_check: Check?
 
-    init(name: String, price: Decimal, forCheck check: Check) {
+    var check: Check {
+        get throws {
+            guard let check = self.internal_check else {
+                throw CheckPartError.missing
+            }
+            return check
+        }
+    }
+
+    init(name: String, price: Decimal) {
         self.name = name
         self.price = price
         self.orderers = []
-        self.check = check
     }
 
-    init(item: any Purchasable, forCheck check: Check) {
+    init(from item: any Purchasable) {
         self.name = item.name
         self.price = item.price
         self.orderers = []
-        self.check = check
+    }
+
+    func addOrderer(_ participant: Participant) throws {
+        let prevCheck = try? participant.check
+        if prevCheck == nil {
+            try self.check.participants.append(participant)
+            self.orderers.append(participant)
+        } else if try prevCheck === self.check {
+            self.orderers.append(participant)
+        } else {
+            throw CheckPartError.mismatched
+        }
+    }
+
+    func removeOrderer(_ participant: Participant) {
+        self.orderers.removeAll(where: { $0 === participant })
     }
 }
 
@@ -42,7 +65,7 @@ final class Item: Purchasable {
 struct GeneratedItem: Purchasable {
     @Guide(description: "The name of the item") // TODO: add regex
     var name: String
-    @Guide(description: "The price of a the given item", .minimum(0))
+    @Guide(description: "The price of the given item", .minimum(0))
     var price: Decimal
     @Guide(description: "The quantity of this item bought", .minimum(0))
     var quantity: Int

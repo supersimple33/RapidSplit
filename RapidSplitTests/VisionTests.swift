@@ -12,7 +12,7 @@ import CoreImage
 
 struct VisionTests {
 
-    @Test("VisionService recognizes text", arguments: [
+    @Test("Text Recognition", arguments: [
         ([], CGSize(width: 800, height: 600)),
         (["HELLO World 123"], CGSize(width: 800, height: 300)),
         (["HELLO", "World", "12.3"], CGSize(width: 800, height: 600)),

@@ -9,7 +9,10 @@ import SwiftUI
 import MaterialUIKit
 
 struct ItemsEditTab: View {
+    @Environment(Router.self) private var router
+
     let check: Check
+    let showContinue: Bool
 
     var body: some View {
         Container {
@@ -19,10 +22,14 @@ struct ItemsEditTab: View {
                         Item(
                             name: "New Item",
                             price: 10.0,
-                            forCheck: self.check
                         )
                     )
                 }
+            if showContinue {
+                ActionButton("Continue", style: check.items.isEmpty ? .outlineStretched : .filledStretched) {
+                    router.navigateTo(route: .participants(check: check))
+                }.disabled(check.items.isEmpty)
+            }
         }
     }
 }

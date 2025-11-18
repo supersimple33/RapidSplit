@@ -46,7 +46,7 @@ struct CheckDetailsScreen: View {
         TabBar(selection: $selectedTab, usesVerticalLayout: true) {
             PayoutsTab(check: check)
                 .tabBarItem(tab: .payout, selection: $selectedTab)
-            ItemsEditTab(check: check)
+            ItemsEditTab(check: check, showContinue: false)
                 .tabBarItem(tab: .items, selection: $selectedTab)
             IdentifyParticipantsScreen(check: check, showContinue: false)
                 .tabBarItem(tab: .participants, selection: $selectedTab)

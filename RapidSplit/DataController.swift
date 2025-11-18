@@ -17,34 +17,30 @@ class DataController {
                 for: Check.self, Item.self, Participant.self, configurations: config)
 
             let check1 = try Check(name: "Friday Dinner")
-            let alice = try Participant(firstName: "Alice", lastName: "Johnson", check: check1)
-            let bob = try Participant(firstName: "Bob", lastName: "Smith", check: check1)
+            let alice = try Participant(firstName: "Alice", lastName: "Johnson")
+            let bob = try Participant(firstName: "Bob", lastName: "Smith")
 
-            let item1 = Item(name: "Margherita Pizza", price: 12.99, forCheck: check1)
-            item1.orderers.append(alice)
-            let item2 = Item(name: "Soda", price: 2.99, forCheck: check1)
-            item2.orderers.append(bob)
+
+            let item1 = Item(name: "Margherita Pizza", price: 12.99)
+            try item1.addOrderer(alice)
+            let item2 = Item(name: "Soda", price: 2.99)
+            try item2.addOrderer(bob)
 
             check1.participants = [alice, bob]
             check1.items = [item1, item2]
 
             container.mainContext.insert(check1)
-            container.mainContext.insert(alice)
-            container.mainContext.insert(bob)
-            container.mainContext.insert(item1)
-            container.mainContext.insert(item2)
-
 
             let check2 = try Check(name: "Lunch at Cafe")
-            let charlie = try Participant(firstName: "Charlie", lastName: "Nguyen", check: check2)
-            let dana = try Participant(firstName: "Dana", lastName: "Lee", check: check2)
+            let charlie = try Participant(firstName: "Charlie", lastName: "Nguyen")
+            let dana = try Participant(firstName: "Dana", lastName: "Lee")
 
-            let item3 = Item(name: "Burger", price: 14.99, forCheck: check2)
-            item3.orderers.append(charlie)
-            let item4 = Item(name: "Fries", price: 4.99, forCheck: check2)
-            item4.orderers.append(dana)
-            let item5 = Item(name: "Milkshake", price: 5.99, forCheck: check2)
-            item5.orderers.append(charlie)
+            let item3 = Item(name: "Burger", price: 14.99)
+            try item3.addOrderer(charlie)
+            let item4 = Item(name: "Fries", price: 4.99)
+            try item4.addOrderer(dana)
+            let item5 = Item(name: "Milkshake", price: 5.99)
+            try item5.addOrderer(charlie)
 
             check2.participants = [charlie, dana]
             check2.items = [item3, item4, item5]

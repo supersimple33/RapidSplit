@@ -81,7 +81,6 @@ struct IdentifyParticipantsScreen: View {
                             firstName: newFirstName,
                             lastName: newLastName,
                             phoneNumber: phoneNumber == "" ? nil : phoneNumber,
-                            check: self.check
                         ))
                     } catch let error {
                         self.showSnackbar = true
@@ -98,20 +97,17 @@ struct IdentifyParticipantsScreen: View {
                         firstName: contact.givenName,
                         lastName: contact.familyName,
                         phoneNumber: phoneNumber.stringValue,
-                        check: self.check
                     ))
                 } else if let phoneNumber = contact.phoneNumbers.first?.value {
                     check.participants.append(try Participant(
                         firstName: contact.givenName,
                         lastName: contact.familyName,
                         phoneNumber: phoneNumber.stringValue,
-                        check: self.check
                     ))
                 } else {
                     check.participants.append(try Participant(
                         firstName: contact.givenName,
                         lastName: contact.familyName,
-                        check: self.check
                     ))
                 }
             } catch let error {
