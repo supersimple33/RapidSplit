@@ -60,12 +60,30 @@ struct SchemaTests {
         #expect(p.items.isEmpty)
     }
 
+    @Test("Phone number will validate")
+    func participantInitValidPhone() throws {
+        let p = try Participant(firstName: "  Alice  ", lastName: " \t Smith  \n ", phoneNumber: "8885551212")
+        #expect(p.phoneNumber == "8885551212")
+        let b = try Participant(firstName: "  Bob  ", lastName: " \t Smith  \n ", phoneNumber: "+18885551212")
+        #expect(b.phoneNumber == "+18885551212")
+    }
+
     @Test("Participant init throws for invalid phone number")
     func participantInitInvalidPhone() throws {
         let check = try Check(name: "Test")
         #expect(throws: Participant.ValidationError.invalidPhoneNumber) {
             check.participants.append(
                 try Participant(firstName: "Bob", lastName: "Jones", phoneNumber: "abc-not-a-phone")
+            )
+        }
+        #expect(throws: Participant.ValidationError.invalidPhoneNumber) {
+            check.participants.append(
+                try Participant(firstName: "Bob", lastName: "Jones", phoneNumber: "")
+            )
+        }
+        #expect(throws: Participant.ValidationError.invalidPhoneNumber) {
+            check.participants.append(
+                try Participant(firstName: "Bob", lastName: "Jones", phoneNumber: "5551212")
             )
         }
         #expect(check.participants.isEmpty)
@@ -102,6 +120,16 @@ struct SchemaTests {
         #expect(check.participants.isEmpty)
         #expect(try Participant(firstName: long + "  ", lastName: "Ok").firstName == long)
         #expect(try Participant(firstName: "ok", lastName: long + "\n").lastName == long)   
+    }
+
+    // MARK: - Item Initialization
+    @Test("Item can be created from generated item")
+    func itemCanBeCreatedFromGeneratedItem() throws {
+        let generatedItem = GeneratedItem(name: "Beans", price: 2.50, quantity: 1)
+        let item = Item(from: generatedItem)
+
+        #expect(item.name == "Beans")
+        #expect(item.price == 2.50)
     }
 
     // MARK: - Relationships & delete rules
@@ -308,5 +336,192 @@ struct SchemaTests {
         let total: Decimal = fetched.getTotalCost()
         #expect(total == Decimal(string: "16.90")!)
     }
-}
 
+    // MARK: - Cross-check invariants & Item behaviors
+
+    @Test("Item.addOrderer adds participant to item's check when participant has none")
+    @MainActor
+    func itemAddOrdererAutoEnrollsParticipantIntoCheck() throws {
+        let container = try makeInMemoryContainer()
+        let context = container.mainContext
+
+        let check = try Check(name: "AutoEnroll")
+        context.insert(check)
+
+        let tea = Item(name: "Tea", price: 1.00)
+        // Attach item to check so Item.check is available
+        check.items.append(tea)
+
+        let frank = try Participant(firstName: "Frank", lastName: "N")
+        // frank has no check yet
+        try tea.addOrderer(frank)
+
+        // Fetch back and verify relationships
+        let fetchedCheck = try #require(context.fetch(FetchDescriptor<Check>()).first)
+        let fetchedItem = try #require(context.fetch(FetchDescriptor<Item>()).first)
+        let fetchedParticipant = try #require(context.fetch(FetchDescriptor<Participant>()).first)
+
+        #expect(try frank.check === fetchedCheck)
+        #expect(fetchedCheck.participants.contains(where: { $0 === fetchedParticipant }))
+        #expect(fetchedItem.orderers.contains(where: { $0 === fetchedParticipant }))
+        #expect(fetchedParticipant.items.contains(where: { $0 === fetchedItem }))
+    }
+
+    @Test("Participant.addItem adds item to participant's check when it has None")
+    @MainActor
+    func participantAddItemAutoEnrollsIntoCheck() throws {
+        let container = try makeInMemoryContainer()
+        let context = container.mainContext
+        
+        let check = try Check(name: "AutoEnroll")
+        context.insert(check)
+        
+        let frank = try Participant(firstName: "Frank", lastName: "N")
+        check.participants.append(frank)
+
+        let tea = Item(name: "Tea", price: 1.00)
+        try frank.addItem(tea)
+
+        let fetchedCheck = try #require(context.fetch(FetchDescriptor<Check>()).first)
+        let fetchedItem = try #require(context.fetch(FetchDescriptor<Item>()).first)
+        let fetchedParticipant = try #require(context.fetch(FetchDescriptor<Participant>()).first)
+        
+        #expect(try tea.check === fetchedCheck)
+        #expect(fetchedCheck.items.contains(where: { $0 === fetchedItem }))
+        #expect(fetchedItem.orderers.contains(where: { $0 === fetchedParticipant }))
+        #expect(fetchedParticipant.items.contains(where: { $0 === fetchedItem }))
+    }
+
+
+    @Test("Item.addOrderer throws when participant belongs to different check")
+    @MainActor
+    func itemAddOrdererThrowsOnMismatchedCheck() throws {
+        let container = try makeInMemoryContainer()
+        let context = container.mainContext
+
+        let checkA = try Check(name: "A")
+        let checkB = try Check(name: "B")
+        context.insert(checkA)
+        context.insert(checkB)
+
+        let itemA = Item(name: "A Item", price: 2.00)
+        checkA.items.append(itemA)
+
+        let partB = try Participant(firstName: "Pat", lastName: "B")
+        checkB.participants.append(partB)
+
+        #expect(throws: CheckPartError.mismatched) {
+            try itemA.addOrderer(partB)
+        }
+
+        // Ensure no links were created or moved
+        let fetchedItems = try context.fetch(FetchDescriptor<Item>())
+        let fetchedParticipants = try context.fetch(FetchDescriptor<Participant>())
+        let fetchedChecks = try context.fetch(FetchDescriptor<Check>())
+
+        let fItemA = try #require(fetchedItems.first(where: { $0.name == "A Item" }))
+        let fPartBOptional = fetchedParticipants.first(where: { $0.firstName == "Pat" && $0.lastName == "B" })
+        let fPartB = try #require(fPartBOptional)
+        let fCheckA = try #require(fetchedChecks.first(where: { $0.name == "A" }))
+        let fCheckB = try #require(fetchedChecks.first(where: { $0.name == "B" }))
+
+        #expect(fItemA.orderers.isEmpty)
+        #expect(fCheckA.participants.allSatisfy { $0 !== fPartB })
+        #expect(fPartB.items.isEmpty)
+        #expect(fCheckB.participants.contains(where: { $0 === fPartB }))
+    }
+
+    @Test("Participant.addItem throws when item belongs to different check")
+    @MainActor
+    func participantAddItemThrowsOnMismatchedCheck() throws {
+        let container = try makeInMemoryContainer()
+        let context = container.mainContext
+
+        let checkA = try Check(name: "AA")
+        let checkB = try Check(name: "BB")
+        context.insert(checkA)
+        context.insert(checkB)
+
+        let alice = try Participant(firstName: "Alice", lastName: "A")
+        checkA.participants.append(alice)
+
+        let burger = Item(name: "Burger B", price: 9.99)
+        checkB.items.append(burger)
+
+        #expect(throws: CheckPartError.mismatched) {
+            try alice.addItem(burger)
+        }
+
+        // Verify nothing linked across checks
+        let fetchedParticipants = try context.fetch(FetchDescriptor<Participant>())
+        let fetchedItems = try context.fetch(FetchDescriptor<Item>())
+
+        let alicePredicate = fetchedParticipants.first(where: { $0.firstName == "Alice" && $0.lastName == "A" })
+        let fAlice = try #require(alicePredicate)
+        let fBurger = try #require(fetchedItems.first(where: { $0.name == "Burger B" }))
+
+        #expect(fAlice.items.isEmpty)
+        #expect(fBurger.orderers.isEmpty)
+    }
+
+    @Test("Item.check throws when item is not attached to a Check")
+    func itemAndParticipantThrowWhenMissingCheck() throws {
+        let orphanItem = Item(name: "Orphan", price: 3.33)
+        #expect(throws: CheckPartError.missing) {
+            _ = try orphanItem.check
+        }
+        let orphanParticipant = try Participant(firstName: "Orphan", lastName: "P")
+        #expect(throws: CheckPartError.missing) {
+            _ = try orphanParticipant.check
+        }
+    }
+
+    @Test("Multiple orderers maintain bidirectional relationship")
+    @MainActor
+    func multipleOrderersBidirectional() throws {
+        let container = try makeInMemoryContainer()
+        let context = container.mainContext
+
+        let check = try Check(name: "Share")
+        context.insert(check)
+
+        let p1 = try Participant(firstName: "Ann", lastName: "One")
+        let p2 = try Participant(firstName: "Ben", lastName: "Two")
+        check.participants.append(contentsOf: [p1, p2])
+
+        let pizza = Item(name: "Pizza", price: 10.00)
+        let soda = Item(name: "Soda", price: 3.89)
+        check.items.append(soda)
+        // Attach item via participant API, then add second orderer via item API, add sodia via API
+        try p1.addItem(pizza)
+        try pizza.addOrderer(p2)
+        try p2.addItem(soda)
+
+        let fetchedP = try context.fetch(FetchDescriptor<Participant>())
+        let fetchedI = try context.fetch(FetchDescriptor<Item>())
+
+        let fP1 = try #require(fetchedP.first(where: { $0.firstName == "Ann" }))
+        let fP2 = try #require(fetchedP.first(where: { $0.firstName == "Ben" }))
+        let fPizza = try #require(fetchedI.first(where: { $0.name == "Pizza" }))
+        let fSoda = try #require(fetchedI.first(where: { $0.name == "Soda" }))
+
+        #expect(fPizza.orderers.contains(where: { $0 === fP1 }))
+        #expect(fPizza.orderers.contains(where: { $0 === fP2 }))
+        #expect(pizza.orderers.count == 2)
+        #expect(fSoda.orderers.contains(where: { $0 === fP2 }))
+        #expect(soda.orderers.count == 1)
+
+        #expect(fP1.items.contains(where: { $0 === fPizza }))
+        #expect(p1.items.count == 1)
+        #expect(fP2.items.contains(where: { $0 === fPizza }))
+        #expect(fP2.items.contains(where: { $0 === fSoda }))
+        #expect(p2.items.count == 2)
+    }
+
+    @Test("Participant.getTotalCost returns zero when no items")
+    func participantTotalCostZero() throws {
+        let p = try Participant(firstName: "Zero", lastName: "Zed")
+        #expect(p.items.isEmpty)
+        #expect(p.getTotalCost() == 0)
+    }
+}
