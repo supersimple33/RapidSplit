@@ -22,7 +22,7 @@ struct SchemaTests {
     // MARK: - Check validation
 
     @Test("Check init trims and accepts valid name")
-    func checkInitTrimsAndValidates() async throws {
+    func checkInitTrimsAndValidates() throws {
         let check = try Check(name: "  Lunch Run  ")
         #expect(check.name == "Lunch Run")
         #expect(check.participants.isEmpty)
@@ -30,7 +30,7 @@ struct SchemaTests {
     }
 
     @Test("Check init throws for empty or whitespace-only name")
-    func checkInitThrowsForEmpty() async throws {
+    func checkInitThrowsForEmpty() throws {
         #expect(throws: Check.ValidationError.emptyName) {
             try Check(name: "")
         }
@@ -40,7 +40,7 @@ struct SchemaTests {
     }
 
     @Test("Check init enforces max name length")
-    func checkInitEnforcesMaxLength() async throws {
+    func checkInitEnforcesMaxLength() throws {
         let justLong = String(repeating: "A", count: Check.maxNameLength)
         #expect(throws: Check.ValidationError.nameTooLong) {
             try Check(name: justLong + "A")
@@ -51,7 +51,7 @@ struct SchemaTests {
     // MARK: - Participant validation
 
     @Test("Participant init trims names and defaults")
-    func participantInitTrimsAndDefaults() async throws {
+    func participantInitTrimsAndDefaults() throws {
         let p = try Participant(firstName: "  Alice  ", lastName: " \t Smith  \n ")
         #expect(p.firstName == "Alice")
         #expect(p.lastName == "Smith")
@@ -61,7 +61,7 @@ struct SchemaTests {
     }
 
     @Test("Participant init throws for invalid phone number")
-    func participantInitInvalidPhone() async throws {
+    func participantInitInvalidPhone() throws {
         let check = try Check(name: "Test")
         #expect(throws: Participant.ValidationError.invalidPhoneNumber) {
             check.participants.append(
@@ -72,7 +72,7 @@ struct SchemaTests {
     }
 
     @Test("Participant init throws for empty names")
-    func participantInitEmptyNames() async throws {
+    func participantInitEmptyNames() throws {
         let check = try Check(name: "Test")
         #expect(throws: Participant.ValidationError.emptyName) {
             check.participants.append(try Participant(firstName: "   ", lastName: "Doe"))
@@ -90,7 +90,7 @@ struct SchemaTests {
     }
 
     @Test("Participant init enforces max name length")
-    func participantInitMaxLength() async throws {
+    func participantInitMaxLength() throws {
         let check = try Check(name: "Test")
         let long = String(repeating: "Z", count: Participant.maxNameLength)
         #expect(throws: Participant.ValidationError.nameTooLong(name: long + "Z")) {
@@ -108,7 +108,7 @@ struct SchemaTests {
 
     @Test("Inverse relationship maintained between Item.orderers and Participant.items")
     @MainActor
-    func inverseRelationshipMaintainedAndDeleted() async throws {
+    func inverseRelationshipMaintainedAndDeleted() throws {
         let container = try makeInMemoryContainer()
         let context = container.mainContext
 
@@ -148,7 +148,7 @@ struct SchemaTests {
 
     @Test("Deleting Check cascades to Items and Participants")
     @MainActor
-    func deletingCheckCascades() async throws {
+    func deletingCheckCascades() throws {
         let container = try makeInMemoryContainer()
         let context = container.mainContext
 
@@ -197,7 +197,7 @@ struct SchemaTests {
 
     @Test("Deleting Participant nullifies Item.orderers")
     @MainActor
-    func deletingParticipantNullifies() async throws {
+    func deletingParticipantNullifies() throws {
         let container = try makeInMemoryContainer()
         let context = container.mainContext
 
@@ -242,7 +242,7 @@ struct SchemaTests {
 
     @Test("Deleting Item nullifies Participant.items")
     @MainActor
-    func deletingItemNullifies() async throws {
+    func deletingItemNullifies() throws {
         let container = try makeInMemoryContainer()
         let context = container.mainContext
 
@@ -288,7 +288,7 @@ struct SchemaTests {
 
     @Test("Participant.getTotalCost sums Decimal prices")
     @MainActor
-    func participantTotalCost() async throws {
+    func participantTotalCost() throws {
         let container = try makeInMemoryContainer()
         let context = container.mainContext
 
