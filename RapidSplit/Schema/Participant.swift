@@ -106,7 +106,7 @@ final class Participant {
     }
 
     func getTotalCost() -> Decimal {
-        return self.items.reduce(0) { $0 + $1.price }
+        return self.items.reduce(Decimal.zero) { $0 + $1.price }
     }
 
     func addItem(_ item: Item) throws {
