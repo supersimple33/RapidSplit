@@ -65,7 +65,7 @@ final class Item: Purchasable {
 struct GeneratedItem: Purchasable {
     @Guide(description: "The name of the item") // TODO: add regex
     var name: String
-    @Guide(description: "The price of a the given item", .minimum(0))
+    @Guide(description: "The price of the given item", .minimum(0))
     var price: Decimal
     @Guide(description: "The quantity of this item bought", .minimum(0))
     var quantity: Int
