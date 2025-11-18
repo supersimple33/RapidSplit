@@ -524,4 +524,129 @@ struct SchemaTests {
         #expect(p.items.isEmpty)
         #expect(p.getTotalCost() == 0)
     }
+
+    // MARK: - Participant.validate
+
+    @Test("Participant.validate passes for trimmed names, valid phone, and attached check")
+    @MainActor
+    func participantValidatePasses() throws {
+        let container = try makeInMemoryContainer()
+        let context = container.mainContext
+
+        let check = try Check(name: "ValidateOK")
+        context.insert(check)
+
+        let p = try Participant(firstName: "Alice", lastName: "Smith")
+        check.participants.append(p)
+        p.phoneNumber = "+18885551212"
+
+        try p.validate()
+        #expect(p.payed == false)
+    }
+
+    @Test("Participant.validate throws missing check when not attached")
+    func participantValidateThrowsMissingCheck() throws {
+        let p = try Participant(firstName: "Solo", lastName: "Person")
+        #expect(throws: CheckPartError.missing) {
+            try p.validate()
+        }
+    }
+
+    @Test("Participant.validate throws formattingDiscrepancy when names need trimming")
+    @MainActor
+    func participantValidateFormattingDiscrepancy() throws {
+        let container = try makeInMemoryContainer()
+        let context = container.mainContext
+
+        let check = try Check(name: "Format")
+        context.insert(check)
+
+        let p = try Participant(firstName: "Amy", lastName: "Bee")
+        check.participants.append(p)
+
+        p.firstName = "  Amy  "
+        #expect(throws: Participant.ValidationError.formattingDiscrepancy) {
+            try p.validate()
+        }
+
+        p.firstName = "Amy"
+        p.lastName = "  Bee \n"
+        #expect(throws: Participant.ValidationError.formattingDiscrepancy) {
+            try p.validate()
+        }
+    }
+
+    @Test("Participant.validate throws emptyName when a name is blank/whitespace-only")
+    @MainActor
+    func participantValidateEmptyName() throws {
+        let container = try makeInMemoryContainer()
+        let context = container.mainContext
+
+        let check = try Check(name: "EmptyName")
+        context.insert(check)
+
+        let p = try Participant(firstName: "A", lastName: "B")
+        check.participants.append(p)
+
+        p.firstName = "   \n\t"
+        #expect(throws: Participant.ValidationError.emptyName) {
+            try p.validate()
+        }
+
+        p.firstName = "Ava"
+        p.lastName = "\n b\t"
+        #expect(throws: Participant.ValidationError.formattingDiscrepancy) {
+            try p.validate()
+        }
+    }
+
+    @Test("Participant.validate throws nameTooLong when a name exceeds max length")
+    @MainActor
+    func participantValidateNameTooLong() throws {
+        let container = try makeInMemoryContainer()
+        let context = container.mainContext
+
+        let check = try Check(name: "TooLong")
+        context.insert(check)
+
+        let p = try Participant(firstName: "A", lastName: "B")
+        check.participants.append(p)
+
+        let long = String(repeating: "X", count: Participant.maxNameLength)
+        p.firstName = long + "X"
+        #expect(throws: Participant.ValidationError.nameTooLong(name: long + "X")) {
+            try p.validate()
+        }
+        p.firstName = long
+        p.lastName = long + "X"
+        #expect(throws: Participant.ValidationError.nameTooLong(name: long + "X")) {
+            try p.validate()
+        }
+
+        p.lastName = long
+        try p.validate()
+
+        let fetchedP = try context.fetch(FetchDescriptor<Participant>())
+        #expect(check.participants.count == 1)
+        let fP1 = try #require(fetchedP.first(where: { $0.firstName == long }))
+        #expect(fP1.lastName == long)
+    }
+
+    @Test("Participant.validate throws invalidPhoneNumber when phone is invalid")
+    @MainActor
+    func participantValidateInvalidPhone() throws {
+        let container = try makeInMemoryContainer()
+        let context = container.mainContext
+
+        let check = try Check(name: "BadPhone")
+        context.insert(check)
+
+        let p = try Participant(firstName: "A", lastName: "B")
+        check.participants.append(p)
+
+        p.phoneNumber = "abc-not-a-phone"
+        #expect(throws: Participant.ValidationError.invalidPhoneNumber) {
+            try p.validate()
+        }
+    }
 }
