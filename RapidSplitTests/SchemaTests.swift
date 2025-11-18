@@ -119,7 +119,7 @@ struct SchemaTests {
         }
         #expect(check.participants.isEmpty)
         #expect(try Participant(firstName: long + "  ", lastName: "Ok").firstName == long)
-        #expect(try Participant(firstName: "ok", lastName: long + "\n").lastName == long)   
+        #expect(try Participant(firstName: "ok", lastName: long + "\n").lastName == long)
     }
 
     // MARK: - Item Initialization
@@ -492,7 +492,7 @@ struct SchemaTests {
         let pizza = Item(name: "Pizza", price: 10.00)
         let soda = Item(name: "Soda", price: 3.89)
         check.items.append(soda)
-        // Attach item via participant API, then add second orderer via item API, add sodia via API
+        // Attach item via participant API, then add second orderer via item API, add soda via API
         try p1.addItem(pizza)
         try pizza.addOrderer(p2)
         try p2.addItem(soda)
