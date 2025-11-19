@@ -47,6 +47,7 @@ struct SplashScreen: View {
                     }
                 }
         }
+        .snackbar(isPresented: $showSnackbar, message: snackbarMessage)
         .onOpenURL { url in
             do {
                 try handle(url: url)
