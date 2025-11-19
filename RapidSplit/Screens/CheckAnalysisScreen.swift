@@ -40,7 +40,7 @@ struct CheckAnalysisScreen: View {
         }
     }
 
-    private enum AnalysisError: LocalizedError {
+    enum AnalysisError: LocalizedError, CaseIterable {
         case noRecognizedText
         case failedImageConversion
 

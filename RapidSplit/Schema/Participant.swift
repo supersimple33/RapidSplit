@@ -30,7 +30,7 @@ final class Participant {
     }
 
     // Domain-specific validation error
-    enum ValidationError: LocalizedError, Equatable {
+    enum ValidationError: LocalizedError, CaseIterable, Equatable {
         case emptyName
         case nameTooLong(name: String)
         case invalidPhoneNumber
@@ -47,6 +47,10 @@ final class Participant {
             case .formattingDiscrepancy:
                 return "Name contains extra whitespace. Please remove leading/trailing spaces."
             }
+        }
+
+        static var allCases: [Participant.ValidationError] {
+            return [.emptyName, .nameTooLong(name: ""), .invalidPhoneNumber, .formattingDiscrepancy]
         }
     }
 
