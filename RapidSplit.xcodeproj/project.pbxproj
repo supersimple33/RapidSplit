@@ -12,6 +12,9 @@
 		FE84CA052ECD5E3F00BF5919 /* RapidSplitSharing.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE84C9FB2ECD5E3F00BF5919 /* RapidSplitSharing.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FE84CA732ECD6F7A00BF5919 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE84CA722ECD6F7A00BF5919 /* Constants.swift */; };
 		FE84CA742ECD6F7A00BF5919 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE84CA722ECD6F7A00BF5919 /* Constants.swift */; };
+		FECCA7772ECE6A94001EAC69 /* InlineSnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = FECCA7762ECE6A94001EAC69 /* InlineSnapshotTesting */; };
+		FECCA7792ECE6A94001EAC69 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = FECCA7782ECE6A94001EAC69 /* SnapshotTesting */; };
+		FECCA77B2ECE6A94001EAC69 /* SnapshotTestingCustomDump in Frameworks */ = {isa = PBXBuildFile; productRef = FECCA77A2ECE6A94001EAC69 /* SnapshotTestingCustomDump */; };
 		FED090A52E71D2F800CC3CC5 /* Tabler in Frameworks */ = {isa = PBXBuildFile; productRef = FED090A42E71D2F800CC3CC5 /* Tabler */; };
 		FED5D7292E8C56FD00A8E9D6 /* MijickCamera in Frameworks */ = {isa = PBXBuildFile; productRef = FED5D7282E8C56FD00A8E9D6 /* MijickCamera */; };
 /* End PBXBuildFile section */
@@ -142,6 +145,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FECCA77B2ECE6A94001EAC69 /* SnapshotTestingCustomDump in Frameworks */,
+				FECCA7772ECE6A94001EAC69 /* InlineSnapshotTesting in Frameworks */,
+				FECCA7792ECE6A94001EAC69 /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,6 +258,9 @@
 			);
 			name = RapidSplitUITests;
 			packageProductDependencies = (
+				FECCA7762ECE6A94001EAC69 /* InlineSnapshotTesting */,
+				FECCA7782ECE6A94001EAC69 /* SnapshotTesting */,
+				FECCA77A2ECE6A94001EAC69 /* SnapshotTestingCustomDump */,
 			);
 			productName = RapidSplitUITests;
 			productReference = FE3209C62E6CE0B900A214CA /* RapidSplitUITests.xctest */;
@@ -319,6 +328,7 @@
 				FED090A32E71D2F800CC3CC5 /* XCRemoteSwiftPackageReference "SwiftTabler" */,
 				FE232C4C2E75E86B004BBBB6 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */,
 				FED5D7272E8C56FD00A8E9D6 /* XCRemoteSwiftPackageReference "Camera" */,
+				FECCA7752ECE6A94001EAC69 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FE3209AC2E6CE0B800A214CA /* Products */;
@@ -822,6 +832,14 @@
 				minimumVersion = 2.0.1;
 			};
 		};
+		FECCA7752ECE6A94001EAC69 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.18.7;
+			};
+		};
 		FED090A32E71D2F800CC3CC5 /* XCRemoteSwiftPackageReference "SwiftTabler" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/supersimple33/SwiftTabler";
@@ -850,6 +868,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FE3209E22E6CE60B00A214CA /* XCRemoteSwiftPackageReference "MaterialUIKit" */;
 			productName = MaterialUIKit;
+		};
+		FECCA7762ECE6A94001EAC69 /* InlineSnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FECCA7752ECE6A94001EAC69 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = InlineSnapshotTesting;
+		};
+		FECCA7782ECE6A94001EAC69 /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FECCA7752ECE6A94001EAC69 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+		FECCA77A2ECE6A94001EAC69 /* SnapshotTestingCustomDump */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FECCA7752ECE6A94001EAC69 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTestingCustomDump;
 		};
 		FED090A42E71D2F800CC3CC5 /* Tabler */ = {
 			isa = XCSwiftPackageProductDependency;
