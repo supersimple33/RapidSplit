@@ -9,9 +9,9 @@ import UIKit
 import Social
 import UniformTypeIdentifiers
 
-let IMAGE_TYPE = UTType.image.identifier as String
+fileprivate let IMAGE_TYPE = UTType.image.identifier as String
 
-struct GroupFileManagerError: LocalizedError {
+fileprivate struct GroupFileManagerError: LocalizedError {
     let errorDescription: String? = "Could not open the group file manager."
 }
 
@@ -73,18 +73,20 @@ class ShareViewController: SLComposeServiceViewController {
     }
 
     private func openMainApp() {
-            // Custom URL scheme – see next section
-            let url = URL(string: "RapidSplit://open-shared-image")!
+        // Custom URL scheme – see next section
+        let url = URL(string: "RapidSplit://" + OPEN_SHARED_IMAGE_PATH)!
 
-            var responder: UIResponder? = self
-            while responder != nil {
-                if let app = responder as? UIApplication {
-                    app.open(url, options: [:], completionHandler: nil)
-                    break
-                }
-                responder = responder?.next
+        print("opening")
+
+        var responder: UIResponder? = self
+        while responder != nil {
+            if let app = responder as? UIApplication {
+                app.open(url, options: [:], completionHandler: nil)
+                break
             }
+            responder = responder?.next
         }
+    }
 
     override func configurationItems() -> [Any]! {
         // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
