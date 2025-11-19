@@ -17,9 +17,15 @@ fileprivate struct GroupFileManagerError: LocalizedError {
 
 class ShareViewController: SLComposeServiceViewController {
 
+    override func viewWillAppear(_ animated: Bool) {
+        // skip loading any views and go straight to app
+        super.viewWillAppear(animated)
+        self.didSelectPost()
+    }
+
     override func isContentValid() -> Bool {
         // Do validation of contentText and/or NSExtensionContext attachments here
-        return true
+        return true // TODO: maybe some analysis here
     }
 
     override func didSelectPost() {
@@ -86,11 +92,6 @@ class ShareViewController: SLComposeServiceViewController {
             }
             responder = responder?.next
         }
-    }
-
-    override func configurationItems() -> [Any]! {
-        // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
-        return []
     }
 
 }
