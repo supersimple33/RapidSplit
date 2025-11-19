@@ -82,8 +82,6 @@ class ShareViewController: SLComposeServiceViewController {
         // Custom URL scheme – see next section
         let url = URL(string: "RapidSplit://" + OPEN_SHARED_IMAGE_PATH)!
 
-        print("opening")
-
         var responder: UIResponder? = self
         while responder != nil {
             if let app = responder as? UIApplication {
