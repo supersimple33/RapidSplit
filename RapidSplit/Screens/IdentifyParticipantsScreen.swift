@@ -26,17 +26,6 @@ struct IdentifyParticipantsScreen: View {
     @State private var showSnackbar = false
     @State private var snackbarMessage: String = ""
 
-    private enum IdentifyParticipantsError: LocalizedError {
-        case regionNotSet
-
-        var errorDescription: String? {
-            switch self {
-            case .regionNotSet:
-                return "No region is set for the current locale."
-            }
-        }
-    }
-
     var body: some View {
         Container {
             ActionButton("Import from Contacts", style: .tonalStretched) {

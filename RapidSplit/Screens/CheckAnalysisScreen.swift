@@ -40,7 +40,7 @@ struct CheckAnalysisScreen: View {
         }
     }
 
-    private enum AnalysisError: LocalizedError {
+    enum AnalysisError: LocalizedError, CaseIterable {
         case noRecognizedText
         case failedImageConversion
 
@@ -90,7 +90,7 @@ struct CheckAnalysisScreen: View {
             } catch let err {
                 print(err)
                 self.snackbarMessage = "Error: \(err.localizedDescription)"
-                self.showSnackbar.toggle()
+                self.showSnackbar = true
             }
         }
         .snackbar(isPresented: $showSnackbar, message: snackbarMessage)
@@ -100,7 +100,7 @@ struct CheckAnalysisScreen: View {
         DispatchQueue.main.async {
             print(error)
             self.snackbarMessage = "Error: \(error.localizedDescription)"
-            self.showSnackbar.toggle()
+            self.showSnackbar = true
         }
     }
 

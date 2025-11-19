@@ -9,6 +9,22 @@ import SwiftUI
 
 struct SplashScreen: View {
     @State private var router = Router()
+    @State private var showSnackbar = false
+    @State private var snackbarMessage: String = ""
+
+    enum OpenUrlError: LocalizedError, CaseIterable {
+        case unknownRoute
+        case failedToOpenFileManager
+        case failedToBuildImage
+
+        var errorDescription: String? {
+            switch self {
+            case .unknownRoute: return "RapidSplit url route is unknown"
+            case .failedToOpenFileManager: return "Failed to open group file manager"
+            case .failedToBuildImage: return "Failed to build image from transfer data"
+            }
+        }
+    }
 
     var body: some View {
         NavigationStack(path: $router.navigationPath) {
@@ -31,6 +47,39 @@ struct SplashScreen: View {
                     }
                 }
         }
+        .snackbar(isPresented: $showSnackbar, message: snackbarMessage)
+        .onOpenURL { url in
+            do {
+                try handle(url: url)
+            } catch let error {
+                self.snackbarMessage = "Error: \(error.localizedDescription)"
+                self.showSnackbar = true
+            }
+        }
+    }
+
+    private func handle(url: URL) throws {
+        guard url.host == OPEN_SHARED_IMAGE_PATH else {
+            throw OpenUrlError.unknownRoute
+        }
+
+        guard let container = FileManager.default
+            .containerURL(forSecurityApplicationGroupIdentifier: GROUP_IDENTIFIER) else {
+
+            throw OpenUrlError.failedToOpenFileManager
+        }
+
+        let fileURL = container.appendingPathComponent(SHARED_IMAGE_FILE_NAME)
+
+        let data = try Data(contentsOf: fileURL)
+        // Attempt to delete the shared image file now that we've loaded it
+        try? FileManager.default.removeItem(at: fileURL)
+
+        guard let image = UIImage(data: data) else {
+            throw OpenUrlError.failedToBuildImage
+        }
+
+        router.jumpToAnalysis(of: image)
     }
 }
 

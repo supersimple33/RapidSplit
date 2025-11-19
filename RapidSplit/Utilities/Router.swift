@@ -40,4 +40,8 @@ class Router {
         self.navigationPath = NavigationPath([Route.details(check: check)])
     }
 
+    func jumpToAnalysis(of image: UIImage) {
+        self.navigationPath = NavigationPath([Route.analysis(image: image)])
+    }
+
 }

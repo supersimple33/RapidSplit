@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		FE232C4E2E75E86B004BBBB6 /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE232C4D2E75E86B004BBBB6 /* PhoneNumberKit */; };
 		FE3209E42E6CE60B00A214CA /* MaterialUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE3209E32E6CE60B00A214CA /* MaterialUIKit */; };
+		FE84CA052ECD5E3F00BF5919 /* RapidSplitSharing.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE84C9FB2ECD5E3F00BF5919 /* RapidSplitSharing.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FE84CA732ECD6F7A00BF5919 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE84CA722ECD6F7A00BF5919 /* Constants.swift */; };
+		FE84CA742ECD6F7A00BF5919 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE84CA722ECD6F7A00BF5919 /* Constants.swift */; };
 		FED090A52E71D2F800CC3CC5 /* Tabler in Frameworks */ = {isa = PBXBuildFile; productRef = FED090A42E71D2F800CC3CC5 /* Tabler */; };
 		FED5D7292E8C56FD00A8E9D6 /* MijickCamera in Frameworks */ = {isa = PBXBuildFile; productRef = FED5D7282E8C56FD00A8E9D6 /* MijickCamera */; };
 /* End PBXBuildFile section */
@@ -28,6 +31,13 @@
 			remoteGlobalIDString = FE3209AA2E6CE0B800A214CA;
 			remoteInfo = RapidSplit;
 		};
+		FE84CA032ECD5E3F00BF5919 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE3209A32E6CE0B800A214CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FE84C9FA2ECD5E3F00BF5919;
+			remoteInfo = RapidSplitSharing;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,6 +51,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FE84CA062ECD5E3F00BF5919 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				FE84CA052ECD5E3F00BF5919 /* RapidSplitSharing.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +69,8 @@
 		FE3209BC2E6CE0B900A214CA /* RapidSplitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RapidSplitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE3209C62E6CE0B900A214CA /* RapidSplitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RapidSplitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE628FA92ECA8484009F236B /* RapidSplit.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RapidSplit.xctestplan; sourceTree = "<group>"; };
+		FE84C9FB2ECD5E3F00BF5919 /* RapidSplitSharing.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RapidSplitSharing.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE84CA722ECD6F7A00BF5919 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -57,6 +80,13 @@
 				Info.plist,
 			);
 			target = FE3209AA2E6CE0B800A214CA /* RapidSplit */;
+		};
+		FE84CA0A2ECD5E3F00BF5919 /* Exceptions for "RapidSplitSharing" folder in "RapidSplitSharing" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FE84C9FA2ECD5E3F00BF5919 /* RapidSplitSharing */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -77,6 +107,14 @@
 		FE3209C92E6CE0B900A214CA /* RapidSplitUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RapidSplitUITests;
+			sourceTree = "<group>";
+		};
+		FE84C9FC2ECD5E3F00BF5919 /* RapidSplitSharing */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FE84CA0A2ECD5E3F00BF5919 /* Exceptions for "RapidSplitSharing" folder in "RapidSplitSharing" target */,
+			);
+			path = RapidSplitSharing;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -107,16 +145,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FE84C9F82ECD5E3F00BF5919 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		FE3209A22E6CE0B800A214CA = {
 			isa = PBXGroup;
 			children = (
+				FE84CA722ECD6F7A00BF5919 /* Constants.swift */,
 				FE628FA92ECA8484009F236B /* RapidSplit.xctestplan */,
 				FE3209AD2E6CE0B800A214CA /* RapidSplit */,
 				FE3209BF2E6CE0B900A214CA /* RapidSplitTests */,
 				FE3209C92E6CE0B900A214CA /* RapidSplitUITests */,
+				FE84C9FC2ECD5E3F00BF5919 /* RapidSplitSharing */,
 				FE3209AC2E6CE0B800A214CA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -127,6 +174,7 @@
 				FE3209AB2E6CE0B800A214CA /* RapidSplit.app */,
 				FE3209BC2E6CE0B900A214CA /* RapidSplitTests.xctest */,
 				FE3209C62E6CE0B900A214CA /* RapidSplitUITests.xctest */,
+				FE84C9FB2ECD5E3F00BF5919 /* RapidSplitSharing.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,10 +190,12 @@
 				FE3209A82E6CE0B800A214CA /* Frameworks */,
 				FE3209A92E6CE0B800A214CA /* Resources */,
 				FE232C4B2E75E761004BBBB6 /* Embed Frameworks */,
+				FE84CA062ECD5E3F00BF5919 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				FE84CA042ECD5E3F00BF5919 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				FE3209AD2E6CE0B800A214CA /* RapidSplit */,
@@ -207,6 +257,28 @@
 			productReference = FE3209C62E6CE0B900A214CA /* RapidSplitUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		FE84C9FA2ECD5E3F00BF5919 /* RapidSplitSharing */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE84CA092ECD5E3F00BF5919 /* Build configuration list for PBXNativeTarget "RapidSplitSharing" */;
+			buildPhases = (
+				FE84C9F72ECD5E3F00BF5919 /* Sources */,
+				FE84C9F82ECD5E3F00BF5919 /* Frameworks */,
+				FE84C9F92ECD5E3F00BF5919 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				FE84C9FC2ECD5E3F00BF5919 /* RapidSplitSharing */,
+			);
+			name = RapidSplitSharing;
+			packageProductDependencies = (
+			);
+			productName = RapidSplitSharing;
+			productReference = FE84C9FB2ECD5E3F00BF5919 /* RapidSplitSharing.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -214,7 +286,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1640;
+				LastSwiftUpdateCheck = 2610;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					FE3209AA2E6CE0B800A214CA = {
@@ -227,6 +299,9 @@
 					FE3209C52E6CE0B900A214CA = {
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = FE3209AA2E6CE0B800A214CA;
+					};
+					FE84C9FA2ECD5E3F00BF5919 = {
+						CreatedOnToolsVersion = 26.1.1;
 					};
 				};
 			};
@@ -253,6 +328,7 @@
 				FE3209AA2E6CE0B800A214CA /* RapidSplit */,
 				FE3209BB2E6CE0B900A214CA /* RapidSplitTests */,
 				FE3209C52E6CE0B900A214CA /* RapidSplitUITests */,
+				FE84C9FA2ECD5E3F00BF5919 /* RapidSplitSharing */,
 			);
 		};
 /* End PBXProject section */
@@ -279,6 +355,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FE84C9F92ECD5E3F00BF5919 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -286,6 +369,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE84CA742ECD6F7A00BF5919 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +387,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FE84C9F72ECD5E3F00BF5919 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FE84CA732ECD6F7A00BF5919 /* Constants.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -315,6 +407,11 @@
 			isa = PBXTargetDependency;
 			target = FE3209AA2E6CE0B800A214CA /* RapidSplit */;
 			targetProxy = FE3209C72E6CE0B900A214CA /* PBXContainerItemProxy */;
+		};
+		FE84CA042ECD5E3F00BF5919 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FE84C9FA2ECD5E3F00BF5919 /* RapidSplitSharing */;
+			targetProxy = FE84CA032ECD5E3F00BF5919 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -335,6 +432,7 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RapidSplit/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera is needed to scan receipts";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -371,6 +469,7 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RapidSplit/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera is needed to scan receipts";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -594,6 +693,68 @@
 			};
 			name = Release;
 		};
+		FE84CA072ECD5E3F00BF5919 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RapidSplitSharing/RapidSplitSharing.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PTS9BGHVQ9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RapidSplitSharing/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = RapidSplitSharing;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.addisonhanrattie.RapidSplit.RapidSplitSharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FE84CA082ECD5E3F00BF5919 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RapidSplitSharing/RapidSplitSharing.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PTS9BGHVQ9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RapidSplitSharing/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = RapidSplitSharing;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.addisonhanrattie.RapidSplit.RapidSplitSharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -629,6 +790,15 @@
 			buildConfigurations = (
 				FE3209D82E6CE0B900A214CA /* Debug */,
 				FE3209D92E6CE0B900A214CA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FE84CA092ECD5E3F00BF5919 /* Build configuration list for PBXNativeTarget "RapidSplitSharing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE84CA072ECD5E3F00BF5919 /* Debug */,
+				FE84CA082ECD5E3F00BF5919 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
