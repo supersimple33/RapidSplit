@@ -19,6 +19,7 @@ struct ErrorsTests {
             + CheckPartError.allCases
             + Participant.ValidationError.allCases
             + CheckAnalysisScreen.AnalysisError.allCases
+            + SplashScreen.OpenUrlError.allCases
 
         for error in allErrors {
             let description = error.errorDescription?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
