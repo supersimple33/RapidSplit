@@ -65,7 +65,7 @@ struct SplashScreen: View {
         let data = try Data(contentsOf: fileURL)
         // Attempt to delete the shared image file now that we've loaded it
         try? FileManager.default.removeItem(at: fileURL)
-        
+
         guard let image = UIImage(data: data) else {
             throw OpenUrlError.failedToBuildImage
         }
