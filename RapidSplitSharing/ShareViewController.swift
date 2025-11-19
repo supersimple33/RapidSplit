@@ -67,7 +67,7 @@ class ShareViewController: SLComposeServiceViewController {
             throw GroupFileManagerError()
         }
 
-        let fileUrl = containerUrl.appendingPathComponent("shared-image.jpg")
+        let fileUrl = containerUrl.appendingPathComponent(SHARED_IMAGE_FILE_NAME)
         try data.write(to: fileUrl)
         self.openMainApp()
     }

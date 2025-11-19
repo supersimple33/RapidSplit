@@ -8,3 +8,5 @@
 import Foundation
 
 let GROUP_IDENTIFIER = "group.com.addisonhanrattie.RapidSplit"
+let OPEN_SHARED_IMAGE_PATH = "open-shared-image"
+let SHARED_IMAGE_FILE_NAME = "shared-image.jpg"
