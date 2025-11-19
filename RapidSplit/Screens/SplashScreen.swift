@@ -48,6 +48,7 @@ struct SplashScreen: View {
             }
         }
     }
+
     private func handle(url: URL) throws {
         guard url.host == OPEN_SHARED_IMAGE_PATH else {
             throw OpenUrlError.unknownRoute
@@ -62,6 +63,9 @@ struct SplashScreen: View {
         let fileURL = container.appendingPathComponent(SHARED_IMAGE_FILE_NAME)
 
         let data = try Data(contentsOf: fileURL)
+        // Attempt to delete the shared image file now that we've loaded it
+        try? FileManager.default.removeItem(at: fileURL)
+        
         guard let image = UIImage(data: data) else {
             throw OpenUrlError.failedToBuildImage
         }
