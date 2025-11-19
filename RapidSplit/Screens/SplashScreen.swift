@@ -9,6 +9,14 @@ import SwiftUI
 
 struct SplashScreen: View {
     @State private var router = Router()
+    @State private var showSnackbar = false
+    @State private var snackbarMessage: String = ""
+
+    enum OpenUrlError: LocalizedError, CaseIterable {
+        case unknownRoute
+        case failedToOpenFileManager
+        case failedToBuildImage
+    }
 
     var body: some View {
         NavigationStack(path: $router.navigationPath) {
@@ -31,6 +39,34 @@ struct SplashScreen: View {
                     }
                 }
         }
+        .onOpenURL { url in
+            do {
+                try handle(url: url)
+            } catch let error {
+                self.snackbarMessage = "Error: \(error.localizedDescription)"
+                self.showSnackbar = true
+            }
+        }
+    }
+    private func handle(url: URL) throws {
+        guard url.host == OPEN_SHARED_IMAGE_PATH else {
+            throw OpenUrlError.unknownRoute
+        }
+
+        guard let container = FileManager.default
+            .containerURL(forSecurityApplicationGroupIdentifier: GROUP_IDENTIFIER) else {
+
+            throw OpenUrlError.failedToOpenFileManager
+        }
+
+        let fileURL = container.appendingPathComponent(SHARED_IMAGE_FILE_NAME)
+
+        let data = try Data(contentsOf: fileURL)
+        guard let image = UIImage(data: data) else {
+            throw OpenUrlError.failedToBuildImage
+        }
+
+        router.jumpToAnalysis(of: image)
     }
 }
 
