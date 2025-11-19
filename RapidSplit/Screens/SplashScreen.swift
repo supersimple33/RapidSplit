@@ -16,6 +16,14 @@ struct SplashScreen: View {
         case unknownRoute
         case failedToOpenFileManager
         case failedToBuildImage
+
+        var errorDescription: String? {
+            switch self {
+            case .unknownRoute: return "RapidSplit url route is unknown"
+            case .failedToOpenFileManager: return "Failed to open group file manager"
+            case .failedToBuildImage: return "Failed to build image from transfer data"
+            }
+        }
     }
 
     var body: some View {
