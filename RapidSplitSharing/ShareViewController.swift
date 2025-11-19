@@ -7,6 +7,13 @@
 
 import UIKit
 import Social
+import UniformTypeIdentifiers
+
+let IMAGE_TYPE = UTType.image.identifier as String
+
+struct GroupFileManagerError: LocalizedError {
+    let errorDescription: String? = "Could not open the group file manager."
+}
 
 class ShareViewController: SLComposeServiceViewController {
 
@@ -17,10 +24,67 @@ class ShareViewController: SLComposeServiceViewController {
 
     override func didSelectPost() {
         // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
-    
+        guard let item = self.extensionContext?.inputItems.first as? NSExtensionItem,
+        let provider = item.attachments?.first else {
+            self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
+            return
+        }
+
+        guard provider.hasItemConformingToTypeIdentifier(IMAGE_TYPE) else {
+            self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
+            return
+        }
+
+        provider.loadItem(forTypeIdentifier: IMAGE_TYPE, options: nil) { [weak self] data, error in
+            guard let self else { return }
+
+            var imageData: Data?
+            if let img = data as? UIImage {
+                imageData = img.jpegData(compressionQuality: 0.95)
+            } else if let url = data as? URL {
+                imageData = try? Data(contentsOf: url)
+            }
+
+            guard let imageData else {
+                self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
+                return
+            }
+
+            do {
+                try self.saveImageDataToAppGroup(imageData)
+                self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
+            } catch {
+                self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
+            }
+        }
         // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
-        self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
+
+    private func saveImageDataToAppGroup(_ data: Data) throws {
+        guard let containerUrl = FileManager.default
+            .containerURL(forSecurityApplicationGroupIdentifier: GROUP_IDENTIFIER) else {
+
+            throw GroupFileManagerError()
+        }
+
+        let fileUrl = containerUrl.appendingPathComponent("shared-image.jpg")
+        try data.write(to: fileUrl)
+        self.openMainApp()
+    }
+
+    private func openMainApp() {
+            // Custom URL scheme – see next section
+            let url = URL(string: "RapidSplit://open-shared-image")!
+
+            var responder: UIResponder? = self
+            while responder != nil {
+                if let app = responder as? UIApplication {
+                    app.open(url, options: [:], completionHandler: nil)
+                    break
+                }
+                responder = responder?.next
+            }
+        }
 
     override func configurationItems() -> [Any]! {
         // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
