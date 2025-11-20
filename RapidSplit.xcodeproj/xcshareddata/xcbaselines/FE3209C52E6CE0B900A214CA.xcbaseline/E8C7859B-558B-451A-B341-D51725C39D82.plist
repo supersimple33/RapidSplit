@@ -19,6 +19,21 @@
 				</dict>
 			</dict>
 		</dict>
+		<key>RapidSplitUITestsLaunchTests</key>
+		<dict>
+			<key>testLaunchPerformance()</key>
+			<dict>
+				<key>com.apple.dt.XCTMetric_ApplicationLaunch-ApplicationFirstFramePresentationResponsive.duration</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>3.090000</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Local Baseline</string>
+					<key>maxPercentRelativeStandardDeviation</key>
+					<real>50.000000</real>
+				</dict>
+			</dict>
+		</dict>
 	</dict>
 </dict>
 </plist>
