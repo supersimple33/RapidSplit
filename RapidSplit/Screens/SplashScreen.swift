@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct SplashScreen: View {
     @State private var router = Router()
@@ -54,6 +55,12 @@ struct SplashScreen: View {
             } catch let error {
                 self.snackbarMessage = "Error: \(error.localizedDescription)"
                 self.showSnackbar = true
+            }
+        }
+        .task {
+            let status = AVCaptureDevice.authorizationStatus(for: .video)
+            if status == .notDetermined {
+                await AVCaptureDevice.requestAccess(for: .video)
             }
         }
     }

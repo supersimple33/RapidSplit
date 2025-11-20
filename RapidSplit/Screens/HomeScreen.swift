@@ -7,7 +7,6 @@
 
 import SwiftUI
 import MaterialUIKit
-import AVFoundation
 
 struct HomeScreen: View {
     @State private var model = TableOptions()
@@ -28,12 +27,6 @@ struct HomeScreen: View {
             }
         }
         .navigationTitle("Receipts")
-        .task {
-            let status = AVCaptureDevice.authorizationStatus(for: .video)
-            if status == .notDetermined {
-                await AVCaptureDevice.requestAccess(for: .video)
-            }
-        }
     }
 }
 
