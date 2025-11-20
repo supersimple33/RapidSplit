@@ -5,6 +5,8 @@
 //  Created by Addison Hanrattie on 9/9/25.
 //
 
+#if DEBUG
+
 import Foundation
 import SwiftData
 
@@ -60,3 +62,4 @@ class DataController {
         }
     }()
 }
+#endif
