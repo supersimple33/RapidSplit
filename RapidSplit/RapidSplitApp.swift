@@ -48,10 +48,26 @@ struct RapidSplitApp: App {
             schema: schema,
             isStoredInMemoryOnly: false
         )
+
+#if DEBUG
+        if CommandLine.arguments.contains(LaunchArguments.reset.rawValue) ||
+           CommandLine.arguments.contains(LaunchArguments.seed.rawValue) {
+            let tempContainer = try! ModelContainer(for: schema, configurations: modelConfiguration)
+            try! tempContainer.erase()
+        }
+#endif
+
         do {
             let container = try ModelContainer(for: schema,
                                                      configurations: modelConfiguration)
             container.mainContext.autosaveEnabled = false
+
+#if DEBUG
+            if CommandLine.arguments.contains(LaunchArguments.seed.rawValue) {
+                try! DataController.seed(context: container.mainContext)
+            }
+#endif
+            
             self.containerResult = .success(container)
         } catch let error as SwiftDataError {
             self.showAlert = true
@@ -59,14 +75,5 @@ struct RapidSplitApp: App {
         } catch let error {
             fatalError(error.localizedDescription)
         }
-#if DEBUG
-        let modelContainer = try! self.containerResult.get()
-        if CommandLine.arguments.contains(LaunchArguments.reset.rawValue) {
-            try! modelContainer.erase()
-        } else if CommandLine.arguments.contains(LaunchArguments.seed.rawValue) {
-            try! modelContainer.erase()
-            try! DataController.seed(context: modelContainer.mainContext)
-        }
-#endif
     }
 }

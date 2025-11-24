@@ -90,6 +90,8 @@ class DataController {
         try item9.addOrderer(henry)
         try item10.addOrderer(gina)
         try item11.addOrderer(gina)
+
+        try context.save()
     }
 }
 #endif
