@@ -56,6 +56,25 @@ final class RapidSplitUITestsLaunchTests: XCTestCase {
 
     @MainActor
     func testLaunchPerformance() throws {
+        let app = XCUIApplication()
+        app.launchArguments.append(LaunchArguments.reset.rawValue)
+        app.launch()
+        app.tap()
+        app.terminate()
+
+        measure(metrics: [XCTApplicationLaunchMetric(waitUntilResponsive: true)]) {
+            XCUIApplication().launch()
+        }
+    }
+
+    @MainActor
+    func testSeededLaunchPerformanc() throws {
+        let app = XCUIApplication()
+        app.launchArguments.append(LaunchArguments.seed.rawValue)
+        app.launch()
+        app.tap()
+        app.terminate()
+
         measure(metrics: [XCTApplicationLaunchMetric(waitUntilResponsive: true)]) {
             XCUIApplication().launch()
         }
