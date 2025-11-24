@@ -59,5 +59,14 @@ struct RapidSplitApp: App {
         } catch let error {
             fatalError(error.localizedDescription)
         }
+#if DEBUG
+        let modelContainer = try! self.containerResult.get()
+        if CommandLine.arguments.contains("--clearSwiftData") {
+            try! modelContainer.erase()
+        } else if CommandLine.arguments.contains("--seedSwiftData") {
+            try! modelContainer.erase()
+            try! DataController.seed(context: modelContainer.mainContext)
+        }
+#endif
     }
 }
