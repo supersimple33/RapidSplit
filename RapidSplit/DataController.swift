@@ -56,6 +56,40 @@ class DataController {
         try item3.addOrderer(charlie)
         try item4.addOrderer(dana)
         try item5.addOrderer(charlie)
+
+        // Check 3: Brunch with Friends
+        let check3 = try Check(name: "Sunday Brunch")
+        context.insert(check3)
+
+        let emma = try Participant(firstName: "Emma", lastName: "Williams")
+        let frank = try Participant(firstName: "Frank", lastName: "Brown")
+
+        let item6 = Item(name: "Avocado Toast", price: 10.49)
+        let item7 = Item(name: "Latte", price: 4.49)
+        let item8 = Item(name: "Pancakes", price: 9.99)
+
+        check3.items = [item6, item7, item8]
+
+        try item6.addOrderer(emma)
+        try item7.addOrderer(frank)
+        try item8.addOrderer(emma)
+
+        // Check 4: Dinner Party
+        let check4 = try Check(name: "Dinner Party")
+        context.insert(check4)
+
+        let gina = try Participant(firstName: "Gina", lastName: "Lopez")
+        let henry = try Participant(firstName: "Henry", lastName: "Kim")
+
+        let item9 = Item(name: "Steak", price: 24.99)
+        let item10 = Item(name: "Salad", price: 7.99)
+        let item11 = Item(name: "Red Wine", price: 18.50)
+
+        check4.items = [item9, item10, item11]
+
+        try item9.addOrderer(henry)
+        try item10.addOrderer(gina)
+        try item11.addOrderer(gina)
     }
 }
 #endif
