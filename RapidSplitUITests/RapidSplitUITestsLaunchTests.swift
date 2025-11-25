@@ -17,13 +17,13 @@ final class RapidSplitUITestsLaunchTests: XCTestCase {
 
     @MainActor
     override func setUp() async throws {
-        continueAfterFailure = false
+        self.continueAfterFailure = false
 
         // Clear camera (and other) permission alerts once per test class
         guard !Self.didClearPermissions else { return }
 
         let app = XCUIApplication()
-        let monitor = addUIInterruptionMonitor(withDescription: "Handle system alerts") { alert in
+        let monitor = self.addUIInterruptionMonitor(withDescription: "Handle system alerts") { alert in
             if alert.buttons["Allow"].exists {
                 alert.buttons["Allow"].tap()
                 return true
@@ -48,7 +48,7 @@ final class RapidSplitUITestsLaunchTests: XCTestCase {
         app.tap()
 
         // Clean up and terminate so tests start from a clean state
-        removeUIInterruptionMonitor(monitor)
+        self.removeUIInterruptionMonitor(monitor)
         app.terminate()
 
         Self.didClearPermissions = true
@@ -56,6 +56,7 @@ final class RapidSplitUITestsLaunchTests: XCTestCase {
 
     @MainActor
     func testLaunchPerformance() throws {
+        // Setup
         let app = XCUIApplication()
         app.launchArguments.append(LaunchArguments.reset.rawValue)
         app.launch()
@@ -69,6 +70,7 @@ final class RapidSplitUITestsLaunchTests: XCTestCase {
 
     @MainActor
     func testSeededLaunchPerformanc() throws {
+        // Setup
         let app = XCUIApplication()
         app.launchArguments.append(LaunchArguments.seed.rawValue)
         app.launch()
