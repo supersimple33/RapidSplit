@@ -52,3 +52,11 @@ func openPhotoInApp(link: String) {
     XCTAssertTrue(rapidSplitButton.waitForExistence(timeout: 5), "RapidSplit app not found in share sheet")
     rapidSplitButton.tap()
 }
+
+@MainActor
+func findElement(named name: String, in root: XCUIElement) -> XCUIElement {
+    let predicate = NSPredicate(format: "label == %@ OR identifier == %@", name, name)
+    return root.descendants(matching: .any)
+        .matching(predicate)
+        .firstMatch
+}
