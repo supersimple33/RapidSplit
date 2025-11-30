@@ -47,7 +47,7 @@ actor GenerationService {
 
     func generateCheckTitle(
         recognizedStrings: [String],
-        options: GenerationOptions = GenerationOptions()
+        options: GenerationOptions = GenerationOptions(temperature: 0.0)
     ) async throws -> String {
         let session = LanguageModelSession(model: .default, instructions: TITLE_INSTRUCTIONS)
         let prompt = "Here is the scanned check, what would be a good name for it?:\n" + recognizedStrings.joined(separator: "\n")
