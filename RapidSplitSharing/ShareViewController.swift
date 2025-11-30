@@ -47,13 +47,15 @@ class ShareViewController: SLComposeServiceViewController {
             var imageData: Data?
             if let img = data as? UIImage {
                 imageData = img.jpegData(compressionQuality: 0.95)
-            } else if let url = data as? URL {
-                imageData = try? Data(contentsOf: url)
+            } else if let url = data as? URL, let raw = try? Data(contentsOf: url) {
+                imageData = self.sanitizeImageData(raw)
+            } else if let raw = data as? Data {
+                imageData = self.sanitizeImageData(raw)
             }
 
             guard let imageData else {
                 self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
-                return
+                return // issue here
             }
 
             do {
@@ -64,6 +66,37 @@ class ShareViewController: SLComposeServiceViewController {
             }
         }
         // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
+    }
+
+    private func sanitizeImageData(_ data: Data, maxPixelSize: CGFloat = 4096) -> Data? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
+            return nil
+        }
+
+        guard CGImageSourceGetCount(source) > 0 else {
+            return nil
+        }
+
+        guard let uti = CGImageSourceGetType(source),
+              let type = UTType(uti as String),
+              type.conforms(to: .image) else {
+            return nil
+        }
+
+        let options: [CFString: Any] = [
+            kCGImageSourceShouldCache: false,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceThumbnailMaxPixelSize: maxPixelSize
+        ]
+
+        guard let cgImage = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) else {
+            return nil
+        }
+
+        let uiImage = UIImage(cgImage: cgImage)
+
+        return uiImage.jpegData(compressionQuality: 0.95)
     }
 
     private func saveImageDataToAppGroup(_ data: Data) throws {
