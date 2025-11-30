@@ -25,3 +25,30 @@ func seedApp() {
     app.tap()
     app.terminate()
 }
+
+@MainActor
+func openPhotoInApp(link: String) {
+    let safari: XCUIApplication = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
+    safari.launch()
+
+    _ = safari.wait(for: .runningForeground, timeout: 30)
+
+    let searchBar = safari.descendants(matching: .any).matching(identifier: "Address").firstMatch
+    searchBar.tap()
+    safari.typeText(link)
+    safari.typeText(XCUIKeyboardKey.return.rawValue)
+
+    let moreButton = safari.buttons["More"]
+    XCTAssertTrue(moreButton.waitForExistence(timeout: 5), "More button didn't appear")
+    moreButton.tap()
+
+    let shareButton = safari.buttons["Share"]
+    XCTAssertTrue(shareButton.waitForExistence(timeout: 5), "Share button didn't appear")
+    shareButton.tap()
+
+    let rapidSplitButton = safari.descendants(matching: .any)
+        .matching(NSPredicate(format: "label == %@", "RapidSplit"))
+        .firstMatch
+    XCTAssertTrue(rapidSplitButton.waitForExistence(timeout: 5), "RapidSplit app not found in share sheet")
+    rapidSplitButton.tap()
+}
