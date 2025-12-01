@@ -60,3 +60,76 @@ func findElement(named name: String, in root: XCUIElement) -> XCUIElement {
         .matching(predicate)
         .firstMatch
 }
+
+@MainActor
+func enterText(_ text: String, into textField: XCUIElement, in app: XCUIApplication) {
+    // Ensure the text field is hittable and focused
+    XCTAssertTrue(textField.waitForExistence(timeout: 5), "Text field did not appear")
+    textField.tap()
+
+    // Try Select All and replace if there's existing text
+    let currentValue = textField.value as? String ?? ""
+    if currentValue.isEmpty == false {
+        textField.press(forDuration: 0.5)
+        let selectAll = app.menuItems["Select All"]
+        if selectAll.waitForExistence(timeout: 1) {
+            selectAll.tap()
+            // Typing new text will replace selection
+            textField.typeText(text)
+        } else {
+            // Fallback: send backspace characters rather than tapping the delete key element
+            let deleteSequence = String(repeating: "\u{8}", count: currentValue.count)
+            textField.typeText(deleteSequence)
+            textField.typeText(text)
+        }
+    } else {
+        // No existing text, just type
+        textField.typeText(text)
+    }
+
+    // Dismiss keyboard if needed by tapping return when present
+    dismissKeyboard(in: app)
+
+    // Assert the text field now contains the typed text (prefer accessibilityValue over value)
+    let valueString: String = {
+        if let accessibility = textField.accessibilityValue, accessibility.isEmpty == false {
+            return accessibility
+        }
+        let staticText = textField.descendants(matching: .staticText).firstMatch
+        if staticText.exists, let label = staticText.label as String?, label.isEmpty == false {
+            return label
+        }
+        return (textField.value as? String) ?? ""
+    }()
+
+    XCTAssertEqual(valueString, text, "Text field should contain the text that was typed")
+}
+
+@MainActor
+func dismissKeyboard(in app: XCUIApplication) {
+    // If no keyboard is present, nothing to do
+    guard app.keyboards.firstMatch.exists else { return }
+
+    // Try common submit/return button labels (as buttons or keys)
+    let candidates = ["Return", "Done", "Go", "Search", "Next", "Join", "Send"]
+
+    for label in candidates {
+        if app.keyboards.buttons[label].exists {
+            app.keyboards.buttons[label].tap()
+            return
+        }
+        if app.keyboards.keys[label].exists {
+            app.keyboards.keys[label].tap()
+            return
+        }
+    }
+
+    // Some setups expose a lowercase "return" key
+    if app.keyboards.keys["return"].exists {
+        app.keyboards.keys["return"].tap()
+        return
+    }
+
+    // As a last resort, type a newline which usually triggers submit/dismiss
+    app.typeText("\n")
+}
