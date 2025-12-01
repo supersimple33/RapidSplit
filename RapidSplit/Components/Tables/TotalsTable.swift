@@ -42,13 +42,15 @@ struct TotalsTable: View {
         LazyVGrid(columns: gridItems) {
             InitialsIcon(participant: participant)
             Text(participant.items.count, format: .number)
+                .accessibilityIdentifier("itemCount.\(participant.firstName).\(participant.lastName)")
             Text(participant.getTotalCost(), format: .currency(code: getCurrencyCode()))
+                .accessibilityIdentifier("totalCost.\(participant.firstName).\(participant.lastName)")
             ActionButton(
                 participant.payed ? "Subtotal" : "Payout",
                 style: participant.payed ? .elevatedStretched : .filledStretched
             ) {
                 handlePayout(participant)
-            }
+            }.accessibilityIdentifier("payout.\(participant.firstName).\(participant.lastName)")
         }
     }
 
