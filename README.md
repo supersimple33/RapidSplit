@@ -14,7 +14,7 @@ An open source app for splitting receipts, checks, and bills. Privacy first no e
 - RapidSplitUITests
 
 ## TODO / Backlog
-- [ ] Finish unit testing
+- [x] Add unit testing
 - [ ] Finish UI testing
 - [ ] Improve UI flow
 - [ ] Audio Support (to better understand who bought what)
