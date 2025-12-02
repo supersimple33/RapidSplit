@@ -38,13 +38,9 @@ func openPhotoInApp(link: String) {
     safari.typeText(link)
     safari.typeText(XCUIKeyboardKey.return.rawValue)
 
-    let moreButton = safari.buttons["More"]
-    XCTAssertTrue(moreButton.waitForExistence(timeout: 5), "More button didn't appear")
-    moreButton.tap()
+    tapButton("More", in: safari)
 
-    let shareButton = safari.buttons["Share"]
-    XCTAssertTrue(shareButton.waitForExistence(timeout: 5), "Share button didn't appear")
-    shareButton.tap()
+    tapButton("Share", in: safari)
 
     let rapidSplitButton = safari.descendants(matching: .any)
         .matching(NSPredicate(format: "label == %@", "RapidSplit"))
@@ -132,4 +128,11 @@ func dismissKeyboard(in app: XCUIApplication) {
 
     // As a last resort, type a newline which usually triggers submit/dismiss
     app.typeText("\n")
+}
+
+@MainActor
+func tapButton(_ name: String, in app: XCUIApplication, timeout: TimeInterval = 3) {
+    let button = app.buttons[name]
+    XCTAssertTrue(button.waitForExistence(timeout: timeout), "\(name) button didn't appear")
+    button.tap()
 }
