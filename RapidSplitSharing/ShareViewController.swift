@@ -55,7 +55,7 @@ class ShareViewController: SLComposeServiceViewController {
 
             guard let imageData else {
                 self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
-                return // issue here
+                return
             }
 
             do {
