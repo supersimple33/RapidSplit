@@ -7,7 +7,7 @@
 
 import XCTest
 
-final class RapidSplitUITestsLaunchTests: AlertDismissingTestCase {
+final class LaunchTests: AlertDismissingTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
