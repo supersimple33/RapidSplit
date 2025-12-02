@@ -13,19 +13,16 @@ import UIKit
 actor VisionService {
     static let shared = VisionService()
 
-    let recognitionRequest: RecognizeTextRequest
-
-    private init() {
-        var request = RecognizeTextRequest()
-        request.recognitionLevel = .accurate
-        self.recognitionRequest = request
-    }
+    private init() { }
 
     func analyzeForText(
         image: CIImage,
         orientation: CGImagePropertyOrientation? = nil,
     ) async throws -> [String] {
-        let result = try await recognitionRequest.perform(on: image, orientation: orientation)
+        var request = RecognizeTextRequest()
+        request.recognitionLevel = .accurate
+
+        let result = try await request.perform(on: image, orientation: orientation)
 
         return result.map { observation in
             // TODO: we can do some more clever stuff here
