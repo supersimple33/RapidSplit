@@ -62,14 +62,14 @@ func findElement(named name: String, in root: XCUIElement) -> XCUIElement {
 }
 
 @MainActor
-func enterText(_ text: String, into textField: XCUIElement, in app: XCUIApplication) {
+func enterText(_ text: String, into textField: XCUIElement, in app: XCUIApplication, erasing: Bool = true) {
     // Ensure the text field is hittable and focused
     XCTAssertTrue(textField.waitForExistence(timeout: 5), "Text field did not appear")
     textField.tap()
 
     // Try Select All and replace if there's existing text
     let currentValue = textField.value as? String ?? ""
-    if currentValue.isEmpty == false {
+    if !currentValue.isEmpty && erasing {
         textField.press(forDuration: 0.5)
         let selectAll = app.menuItems["Select All"]
         if selectAll.waitForExistence(timeout: 1) {

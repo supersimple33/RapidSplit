@@ -66,15 +66,15 @@ final class CheckCreationTests: XCTestCase {
         let firstNameFields = app.textFields.matching(NSPredicate(format: "placeholderValue CONTAINS[c] %@", "Enter First Name"))
         let firstNameTextField = firstNameFields.element(boundBy: 0)
         XCTAssertTrue(firstNameTextField.waitForExistence(timeout: 5), "Expected an 'First Name' text field to appear")
-        enterText("John", into: firstNameTextField, in: app)
+        enterText("John", into: firstNameTextField, in: app, erasing: false)
         let lastNameFields = app.textFields.matching(NSPredicate(format: "placeholderValue CONTAINS[c] %@", "Enter Last Name"))
         let lastNameTextField = lastNameFields.element(boundBy: 0)
         XCTAssertTrue(lastNameTextField.waitForExistence(timeout: 5), "Expected an 'Last Name' text field to appear")
-        enterText("Doe", into: lastNameTextField, in: app)
+        enterText("Doe", into: lastNameTextField, in: app, erasing: false)
         let phoneFields = app.textFields.matching(NSPredicate(format: "placeholderValue CONTAINS[c] %@", "Enter Phone Number"))
         let phoneTextField = phoneFields.element(boundBy: 0)
         XCTAssertTrue(phoneTextField.waitForExistence(timeout: 5), "Expected an 'Phone Number' text field to appear")
-        enterText("6825552419", into: phoneTextField, in: app)
+        enterText("6825552419", into: phoneTextField, in: app, erasing: false)
         // Confirm the new contact
         let confirmContact = app.buttons["Add Participant"]
         XCTAssertTrue(confirmContact.waitForExistence(timeout: 3), "Expected a 'Add Participant' button to appear")
