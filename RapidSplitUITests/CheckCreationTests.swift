@@ -9,10 +9,11 @@ import XCTest
 
 fileprivate let IMAGE_LINK = "https://raw.githubusercontent.com/supersimple33/RapidSplit/refs/heads/test/AddingUITests/RapidSplitUITests/media/check.jpg"
 
-final class CheckCreationTests: XCTestCase {
+final class CheckCreationTests: AlertDismissingTestCase {
 
     @MainActor
     override func setUp() async throws {
+        try await super.setUp()
         self.continueAfterFailure = false
         resetApp() // Ensure the app is installed and no exisiting checks
     }
