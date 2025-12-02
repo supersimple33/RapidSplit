@@ -65,7 +65,13 @@ func findElement(named name: String, in root: XCUIElement) -> XCUIElement {
 }
 
 @MainActor
-func enterText(_ text: String, into textField: XCUIElement, in app: XCUIApplication, erasing: Bool = true) {
+func enterText(
+    _ text: String,
+    into textField: XCUIElement,
+    in app: XCUIApplication,
+    erasing: Bool = true,
+    check: String? = nil
+) {
     // Ensure the text field is hittable and focused
     XCTAssertTrue(textField.waitForExistence(timeout: 5), "Text field did not appear")
     textField.tap()
@@ -105,7 +111,11 @@ func enterText(_ text: String, into textField: XCUIElement, in app: XCUIApplicat
         return (textField.value as? String) ?? ""
     }()
 
-    XCTAssertEqual(valueString, text, "Text field should contain the text that was typed")
+    if let check {
+        XCTAssertEqual(valueString, check, "Text field should contain the text that was typed: \(valueString) vs \(check)")
+    } else {
+        XCTAssertEqual(valueString, text, "Text field should contain the text that was typed: \(valueString) vs \(text)")
+    }
 }
 
 @MainActor
