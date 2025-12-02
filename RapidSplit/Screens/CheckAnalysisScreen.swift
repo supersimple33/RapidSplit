@@ -19,7 +19,7 @@ struct CheckAnalysisScreen: View {
     @State private var snackbarMessage: String = ""
 
     @State private var phase: AnalysisPhase = .setup
-    @State private var statusUpdates: [String] = ["Initializing Analysis"]
+    @State private var statusUpdates: [String] = ["Initializing Analysis", AnalysisPhase.setup.displayTitle]
 
     enum AnalysisPhase: Hashable {
         case setup
@@ -64,9 +64,6 @@ struct CheckAnalysisScreen: View {
             Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
             Text(statusUpdates.joined(separator: "\n"))
         }
-        .onChange(of: phase, { oldValue, newValue in
-            self.statusUpdates.append(phase.displayTitle + "...")
-        })
         .task {
             await runAnalysis()
         }
@@ -81,7 +78,7 @@ struct CheckAnalysisScreen: View {
             }
 
             // Begin Image Recognition
-            self.phase = .detectingText
+            self.setPhase(.detectingText)
             let recognizedStrings = try await VisionService.shared.analyzeForText(image: ciImage)
 
             // Check recognition success
@@ -91,7 +88,7 @@ struct CheckAnalysisScreen: View {
             }
 
             // Begin AI Analysis
-            self.phase = .runningAIAnalysis
+            self.setPhase(.runningAIAnalysis)
             let items = try await GenerationService.shared.generateCheckStructure(
                 recognizedStrings: recognizedStrings,
                 onPartial: handlePartialCheck
@@ -99,7 +96,7 @@ struct CheckAnalysisScreen: View {
             self.statusUpdates.append("Generated \(items.count) check items from scan")
 
             // Make a name
-            self.phase = .namingCheck
+            self.setPhase(.namingCheck)
             let title = try await GenerationService.shared.generateCheckTitle(recognizedStrings: recognizedStrings)
 
             // Finish
@@ -118,6 +115,11 @@ struct CheckAnalysisScreen: View {
                 self.statusUpdates.append(rawContent.jsonString)
             }
         }
+    }
+
+    private func setPhase(_ newPhase: AnalysisPhase) {
+        self.phase = newPhase
+        self.statusUpdates.append(newPhase.displayTitle + "...")
     }
 }
 
