@@ -18,37 +18,17 @@ actor VisionService {
     func analyzeForText(
         image: CIImage,
         orientation: CGImagePropertyOrientation? = nil,
-        progressHandler: VNRequestProgressHandler? = nil,
-        handleError: ((Error) -> Void)? = nil,
-        completion: sending @escaping ([String]) -> Void
-    ) throws {
-        let requestHandler = orientation == nil
-            ? VNImageRequestHandler(ciImage: image)
-            : VNImageRequestHandler(ciImage: image, orientation: orientation!)
-
-        let request = VNRecognizeTextRequest { request, error in
-            if let error {
-                // You may want to surface this error to the UI.
-                handleError?(error)
-                return
-            }
-
-            guard let observations = request.results as? [VNRecognizedTextObservation] else { return }
-            let recognizedStrings = observations.compactMap { observation in
-                // TODO: we can do some more clever stuff here
-                // Return the string of the top VNRecognizedText instance.
-                return observation.topCandidates(1).first?.string
-            }
-
-            completion(recognizedStrings)
-        }
-
+    ) async throws -> [String] {
+        var request = RecognizeTextRequest()
         request.recognitionLevel = .accurate
-        if let progressHandler {
-            request.progressHandler = progressHandler
-        }
 
-        try requestHandler.perform([request])
+        let result = try await request.perform(on: image, orientation: orientation)
+
+        return result.map { observation in
+            // TODO: we can do some more clever stuff here
+            // Return the string of the top RecognizedTextObservation instance.
+            return observation.topCandidates(1).first?.string ?? ""
+        }
     }
 }
 

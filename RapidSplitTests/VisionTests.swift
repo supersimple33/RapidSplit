@@ -35,24 +35,7 @@ struct VisionTests {
 
 
         // Act: Bridge the completion handler API to async/await
-        let recognized: [String] = try await withCheckedThrowingContinuation { continuation in
-            Task {
-                do {
-                    try await VisionService.shared.analyzeForText(
-                        image: ciImage,
-                        progressHandler: nil,
-                        handleError: { error in
-                            continuation.resume(throwing: error)
-                        },
-                        completion: { strings in
-                            continuation.resume(returning: strings)
-                        }
-                    )
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+        let recognized: [String] = try await VisionService.shared.analyzeForText(image: ciImage)
 
         // Assert: Recognized text should contain all expected lines
         #expect(recognized.count == lines.count, "Recognized lines mismatch \(recognized.count) != \(lines.count)")
