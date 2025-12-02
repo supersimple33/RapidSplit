@@ -45,7 +45,14 @@ func openPhotoInApp(link: String) {
     let rapidSplitButton = safari.descendants(matching: .any)
         .matching(NSPredicate(format: "label == %@", "RapidSplit"))
         .firstMatch
-    XCTAssertTrue(rapidSplitButton.waitForExistence(timeout: 5), "RapidSplit app not found in share sheet")
+    if !rapidSplitButton.waitForExistence(timeout: 2) {
+        tapButton("Options ", in: safari)
+        let imageButton = safari.staticTexts["Image"]
+        XCTAssertTrue(imageButton.waitForExistence(timeout: 2), "Image button didn't appear")
+        imageButton.tap()
+        tapButton("Done", in: safari)
+    }
+    XCTAssertTrue(rapidSplitButton.waitForExistence(timeout: 3), "RapidSplit app not found in share sheet")
     rapidSplitButton.tap()
 }
 
