@@ -14,7 +14,6 @@ struct CheckAnalysisScreen: View {
     @Environment(Router.self) private var router
 
     let image: UIImage
-    private let context = CIContext()
 
     @State private var showSnackbar = false
     @State private var snackbarMessage: String = ""
@@ -65,51 +64,50 @@ struct CheckAnalysisScreen: View {
             Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
             Text(statusUpdates.joined(separator: "\n"))
         }
+        .onChange(of: phase, { oldValue, newValue in
+            self.statusUpdates.append(phase.displayTitle + "...")
+        })
         .task {
-            do {
-                guard let ciImage = CIImage(image: image) else {
-                    handleError(error: AnalysisError.failedImageConversion)
-                    return
-                }
-                phase = .detectingText
-                self.statusUpdates.append(phase.displayTitle + "...")
-                try await VisionService.shared
-                    .analyzeForText(image: ciImage,
-                                    progressHandler: handleProgess,
-                                    handleError: handleError
-                    ) { recognizedStrings in
-                        DispatchQueue.main.async {
-                            phase = .runningAIAnalysis
-                            self.statusUpdates.append(phase.displayTitle + "...")
-                            self.statusUpdates.append("Detected \(recognizedStrings.count) lines of text")
-                        }
-                        Task {
-                            await handleVisionFinished(recognizedStrings: recognizedStrings)
-                        }
-                    }
-            } catch let err {
-                print(err)
-                self.snackbarMessage = "Error: \(err.localizedDescription)"
-                self.showSnackbar = true
-            }
+            await runAnalysis()
         }
         .snackbar(isPresented: $showSnackbar, message: snackbarMessage)
     }
 
-    nonisolated private func handleError(error: Error) {
-        DispatchQueue.main.async {
-            print(error)
-            self.snackbarMessage = "Error: \(error.localizedDescription)"
-            self.showSnackbar = true
-        }
-    }
+    private func runAnalysis() async {
+        do {
+            // Check conversion
+            guard let ciImage = CIImage(image: image) else {
+                throw AnalysisError.failedImageConversion
+            }
 
-    nonisolated private func handleProgess(with request: VNRequest, progress: Double, error: Error?) {
-        if let error {
-            handleError(error: error)
-        }
-        DispatchQueue.main.async {
-            self.statusUpdates.append("\(Int(progress * 100))% complete processing text")
+            // Begin Image Recognition
+            self.phase = .detectingText
+            let recognizedStrings = try await VisionService.shared.analyzeForText(image: ciImage)
+
+            // Check recognition success
+            self.statusUpdates.append("Detected \(recognizedStrings.count) lines of text")
+            guard !recognizedStrings.isEmpty else {
+                throw AnalysisError.noRecognizedText
+            }
+
+            // Begin AI Analysis
+            self.phase = .runningAIAnalysis
+            let items = try await GenerationService.shared.generateCheckStructure(
+                recognizedStrings: recognizedStrings,
+                onPartial: handlePartialCheck
+            )
+            self.statusUpdates.append("Generated \(items.count) check items from scan")
+
+            // Make a name
+            self.phase = .namingCheck
+            let title = try await GenerationService.shared.generateCheckTitle(recognizedStrings: recognizedStrings)
+
+            // Finish
+            router.navigateTo(route: .overview(title: title, items: items))
+        } catch let err {
+            print(err)
+            self.snackbarMessage = "Error: \(err.localizedDescription)"
+            self.showSnackbar = true
         }
     }
 
@@ -119,30 +117,6 @@ struct CheckAnalysisScreen: View {
                 self.phase = .buildingCheckItems
                 self.statusUpdates.append(rawContent.jsonString)
             }
-        }
-    }
-
-    nonisolated private func handleVisionFinished(recognizedStrings: [String]) async {
-        guard !recognizedStrings.isEmpty else {
-            handleError(error: AnalysisError.noRecognizedText)
-            return
-        }
-
-        do {
-            let items = try await GenerationService.shared.generateCheckStructure(
-                recognizedStrings: recognizedStrings,
-                onPartial: handlePartialCheck
-            )
-            await MainActor.run {
-                self.phase = .namingCheck
-                self.statusUpdates.append(phase.displayTitle + "...")
-            }
-            let title = try await GenerationService.shared.generateCheckTitle(recognizedStrings: recognizedStrings)
-            await MainActor.run {
-                router.navigateTo(route: .overview(title: title, items: items))
-            }
-        } catch let err {
-            handleError(error: err)
         }
     }
 }
