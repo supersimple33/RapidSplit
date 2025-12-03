@@ -33,6 +33,12 @@ func openPhotoInApp(link: String) {
 
     _ = safari.wait(for: .runningForeground, timeout: 30)
 
+    // Handle first-run overlay
+    let continueButton = safari.buttons["Continue"]
+    if continueButton.waitForExistence(timeout: 3) {
+        continueButton.tap()
+    }
+
     let searchBar = safari.descendants(matching: .any).matching(identifier: "Address").firstMatch
     searchBar.tap()
     safari.typeText(link)
