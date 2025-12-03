@@ -29,7 +29,7 @@ final class CheckEditTests: AlertDismissingTestCase {
         element2.tap()
 
         let priceField = app.textFields.matching(identifier: "Item Price").element(boundBy: 0)
-        enterText("$23.00", into: priceField, in: app)
+        enterText("$23", into: priceField, in: app, check: "$23.00")
 
         let element3 = app.textFields.matching(identifier: "Item Name").element(boundBy: 0)
         enterText("Chicken", into: element3, in: app)

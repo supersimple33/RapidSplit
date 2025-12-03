@@ -35,7 +35,7 @@ final class CheckCreationTests: AlertDismissingTestCase {
         let itemPriceFields = app.textFields.matching(NSPredicate(format: "placeholderValue == %@", "Item Price"))
         let priceTextField = itemPriceFields.element(boundBy: 0)
         XCTAssertTrue(priceTextField.waitForExistence(timeout: 5), "Expected an 'Item Name' text field to appear")
-        enterText("$21.00", into: priceTextField, in: app)
+        enterText("$21", into: priceTextField, in: app, check: "$21.00")
 
         // Move onto the next page
         tapButton("Continue", in: app)
