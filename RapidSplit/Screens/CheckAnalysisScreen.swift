@@ -19,7 +19,7 @@ struct CheckAnalysisScreen: View {
     @State private var snackbarMessage: String = ""
 
     @State private var phase: AnalysisPhase = .setup
-    @State private var statusUpdates: [String] = ["Initializing Analysis", AnalysisPhase.setup.displayTitle]
+    @State private var statusUpdates: [String] = ["Initializing Analysis", AnalysisPhase.setup.displayTitle, "is CI: \(IS_RUNNING_CI)"]
 
     enum AnalysisPhase: Hashable {
         case setup

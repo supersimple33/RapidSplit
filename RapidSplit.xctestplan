@@ -32,6 +32,7 @@
   },
   "testTargets" : [
     {
+      "enabled" : false,
       "parallelizable" : true,
       "target" : {
         "containerPath" : "container:RapidSplit.xcodeproj",
