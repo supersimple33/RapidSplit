@@ -16,6 +16,11 @@ final class CheckCreationTests: AlertDismissingTestCase {
         try await super.setUp()
         self.continueAfterFailure = false
         resetApp() // Ensure the app is installed and no exisiting checks
+
+        // there is not llm available when running CI
+        if !isRunningCI {
+            throw XCTSkip("Skipping UI performance tests on CI environment.")
+        }
     }
 
     @MainActor
