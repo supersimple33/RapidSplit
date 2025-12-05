@@ -8,6 +8,8 @@
 import Foundation
 import XCTest
 
+let isRunningCI = ProcessInfo.processInfo.environment["CI"] != nil
+
 @MainActor
 func resetApp() {
     let app = XCUIApplication()

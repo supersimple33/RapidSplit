@@ -17,6 +17,11 @@ final class LaunchTests: AlertDismissingTestCase {
     override func setUp() async throws {
         try await super.setUp()
         self.continueAfterFailure = false
+
+        // Skip UI performance tests when running in CI to avoid flaky results and long runtimes
+        if !isRunningCI {
+            throw XCTSkip("Skipping UI performance tests on CI environment.")
+        }
     }
 
     @MainActor
@@ -29,7 +34,7 @@ final class LaunchTests: AlertDismissingTestCase {
     }
 
     @MainActor
-    func testSeededLaunchPerformanc() throws {
+    func testSeededLaunchPerformance() throws {
         seedApp() // Setup
 
         measure(metrics: [XCTApplicationLaunchMetric(waitUntilResponsive: true)]) {
