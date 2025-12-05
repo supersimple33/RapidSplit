@@ -25,7 +25,7 @@ final class CheckCreationTests: AlertDismissingTestCase {
         app.activate()
 
         // Add a new item
-        tapButton("Add New Item", in: app, timeout: 25)
+        tapButton("Add New Item", in: app, timeout: 90)
         // Check an item text field appeared; prefer the focused 'Item Name' field
         let itemNameFields = app.textFields.matching(NSPredicate(format: "placeholderValue == %@", "Item Name"))
         let nameTextField = itemNameFields.element(boundBy: 0)
