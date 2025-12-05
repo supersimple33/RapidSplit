@@ -39,7 +39,7 @@ fileprivate let TEST_CHECKS = [
 
 struct GenerationTests {
 
-    @Test("Title Generation", .enabled(if: !IS_RUNNING_IN_CLOUD), arguments: zip(TEST_CHECKS, [
+    @Test("Title Generation", .enabled(if: !IS_RUNNING_CI), arguments: zip(TEST_CHECKS, [
         "McDonald's Meal Order",
         "Sonic Drive-In Feast",
         "Chipotle Meal"
@@ -51,7 +51,7 @@ struct GenerationTests {
         #expect(title == expectedTitle)
     }
 
-    @Test("Item Generation", .enabled(if: !IS_RUNNING_IN_CLOUD), arguments: zip(TEST_CHECKS, [
+    @Test("Item Generation", .enabled(if: !IS_RUNNING_CI), arguments: zip(TEST_CHECKS, [
         [
             GeneratedItem(name: "BigMac", price: 5.49, quantity: 1),
             GeneratedItem(name: "McNugget Meal", price: 10.99, quantity: 1),

@@ -18,4 +18,5 @@ enum LaunchArguments: String {
     case reset = "--clearSwiftData"
     case seed = "--seedSwiftData"
 }
+let IS_RUNNING_CI = ProcessInfo.processInfo.environment["CI"] != nil
 #endif

@@ -8,8 +8,6 @@
 import Foundation
 import XCTest
 
-let isRunningCI = ProcessInfo.processInfo.environment["CI"] != nil
-
 @MainActor
 func resetApp() {
     let app = XCUIApplication()
@@ -119,7 +117,7 @@ func enterText(
         return (textField.value as? String) ?? ""
     }()
 
-    if !isRunningCI {
+    if !IS_RUNNING_CI {
         if let check {
             XCTAssertEqual(valueString, check, "Text field should contain the text that was typed: \(valueString) vs \(check)")
         } else {

@@ -18,7 +18,7 @@ final class CheckCreationTests: AlertDismissingTestCase {
         resetApp() // Ensure the app is installed and no exisiting checks
 
         // there is not llm available when running CI
-        if !isRunningCI {
+        if !IS_RUNNING_CI {
             throw XCTSkip("Skipping UI performance tests on CI environment.")
         }
     }
