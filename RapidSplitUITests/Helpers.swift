@@ -35,7 +35,7 @@ func openPhotoInApp(link: String) {
 
     // Handle first-run overlay
     let continueButton = safari.buttons["Continue"]
-    if continueButton.waitForExistence(timeout: 3) {
+    if continueButton.waitForExistence(timeout: 10) {
         continueButton.tap()
     }
 
@@ -51,7 +51,7 @@ func openPhotoInApp(link: String) {
     let rapidSplitButton = safari.descendants(matching: .any)
         .matching(NSPredicate(format: "label == %@", "RapidSplit"))
         .firstMatch
-    if !rapidSplitButton.waitForExistence(timeout: 2) {
+    if !rapidSplitButton.waitForExistence(timeout: 5) {
         tapButton("Options ", in: safari)
         let imageButton = safari.staticTexts["Image"]
         XCTAssertTrue(imageButton.waitForExistence(timeout: 2), "Image button didn't appear")
