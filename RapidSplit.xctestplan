@@ -23,6 +23,12 @@
         }
       ]
     },
+    "environmentVariableEntries" : [
+      {
+        "key" : "CI",
+        "value" : "$(CI)"
+      }
+    ],
     "performanceAntipatternCheckerEnabled" : true,
     "targetForVariableExpansion" : {
       "containerPath" : "container:RapidSplit.xcodeproj",
