@@ -44,6 +44,10 @@ func openPhotoInApp(link: String) {
     safari.typeText(link)
     safari.typeText(XCUIKeyboardKey.return.rawValue)
 
+    // Wait for image load
+    let image = safari.images.firstMatch
+    XCTAssertTrue(image.waitForExistence(timeout: 15), "Image did not load")
+
     tapButton("More", in: safari)
 
     tapButton("Share", in: safari)
