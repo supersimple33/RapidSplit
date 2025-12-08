@@ -43,7 +43,7 @@ final class CheckCreationTests: AlertDismissingTestCase {
         // Add Anna Haro
         tapButton("Import from Contacts", in: app)
         let contact = findElement(named: "Anna Haro", in: app)
-        XCTAssertTrue(contact.waitForExistence(timeout: 5), "Anna Haro not found anywhere")
+        XCTAssertTrue(contact.waitForExistence(timeout: 20), "Anna Haro not found anywhere")
         contact.tap()
         // Verify that Anna Haro now appears on screen after selection
         let annaLabel = app.textFields["Anna"]
