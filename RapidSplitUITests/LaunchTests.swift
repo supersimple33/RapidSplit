@@ -19,7 +19,7 @@ final class LaunchTests: AlertDismissingTestCase {
         self.continueAfterFailure = false
 
         // Skip UI performance tests when running in CI to avoid flaky results and long runtimes
-        if !IS_RUNNING_CI {
+        if IS_RUNNING_CI {
             throw XCTSkip("Skipping UI performance tests on CI environment.")
         }
     }
