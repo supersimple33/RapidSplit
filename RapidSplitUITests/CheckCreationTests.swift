@@ -20,7 +20,7 @@ final class CheckCreationTests: AlertDismissingTestCase {
 
     @MainActor
     func testCheckCreation() throws {
-        let app = XCUIApplication()
+        let app = self.getAppWithEnv()
         openPhotoInApp(link: IMAGE_LINK)
         app.activate()
 

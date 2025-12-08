@@ -18,7 +18,7 @@ class AlertDismissingTestCase: XCTestCase {
         // Clear camera (and other) permission alerts once per test class
         guard !Self.didClearPermissions else { return }
 
-        let app = XCUIApplication()
+        let app = self.getAppWithEnv()
         let monitor = self.addUIInterruptionMonitor(withDescription: "Handle system alerts") { alert in
             if alert.buttons["Allow"].exists {
                 alert.buttons["Allow"].tap()
@@ -48,5 +48,16 @@ class AlertDismissingTestCase: XCTestCase {
         app.terminate()
 
         Self.didClearPermissions = true
+    }
+
+    @MainActor
+    final func getAppWithEnv() -> XCUIApplication {
+        let app = XCUIApplication()
+
+        if let CI = ProcessInfo.processInfo.environment["CI"] {
+            app.launchEnvironment["CI"] = CI
+        }
+
+        return app
     }
 }

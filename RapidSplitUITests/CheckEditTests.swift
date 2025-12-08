@@ -18,7 +18,7 @@ final class CheckEditTests: AlertDismissingTestCase {
 
     @MainActor
     func testDinnerPartyEditing() throws {
-        let app = XCUIApplication()
+        let app = self.getAppWithEnv()
         app.activate()
         app/*@START_MENU_TOKEN@*/.staticTexts["Name"]/*[[".otherElements.staticTexts[\"Name\"]",".staticTexts[\"Name\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
 
