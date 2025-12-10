@@ -41,15 +41,15 @@ final class CheckEditTests: AlertDismissingTestCase {
         let element5 = app.textFields.matching(identifier: "Phone").element(boundBy: 0)
         enterText("555 123 4567", into: element5, in: app, erasing: false, check: "(555) 123-4567")
 
-        app/*@START_MENU_TOKEN@*/.buttons["Manually Add"]/*[[".otherElements.buttons[\"Manually Add\"]",".buttons[\"Manually Add\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
+        tapButton("Manually Add", in: app)
         enterText("John", into: app.textFields["Enter First Name*"], in: app, erasing: false)
         enterText("Doe", into: app.textFields["Enter Last Name*"], in: app, erasing: false)
-        app/*@START_MENU_TOKEN@*/.buttons["Add Participant"]/*[[".otherElements.buttons[\"Add Participant\"]",".buttons[\"Add Participant\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
+        tapButton("Add Participant", in: app)
 
         app/*@START_MENU_TOKEN@*/.images["mail.and.text.magnifyingglass"]/*[[".otherElements.images[\"mail.and.text.magnifyingglass\"]",".images[\"mail.and.text.magnifyingglass\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
         app/*@START_MENU_TOKEN@*/.switches["assignmentToggle.New Item.John.Doe"].images["square"].firstMatch/*[[".images.matching(identifier: \"square\").element(boundBy: 8)",".switches[\"assignmentToggle.New Item.John.Doe\"]",".images.firstMatch",".images[\"Square\"].firstMatch",".images[\"square\"].firstMatch"],[[[-1,1,1],[-1,0]],[[-1,4],[-1,3],[-1,2]]],[0,0]]@END_MENU_TOKEN@*/.tap()
         app/*@START_MENU_TOKEN@*/.switches["assignmentToggle.New Item.Gina.Lopez"].images["square"].firstMatch/*[[".images.matching(identifier: \"square\").element(boundBy: 7)",".switches[\"assignmentToggle.New Item.Gina.Lopez\"]",".images.firstMatch",".images[\"Square\"].firstMatch",".images[\"square\"].firstMatch"],[[[-1,1,1],[-1,0]],[[-1,4],[-1,3],[-1,2]]],[0,0]]@END_MENU_TOKEN@*/.tap()
-        app.buttons["BackButton"].firstMatch.tap()
+        tapButton("BackButton", in: app)
         XCTAssertTrue(element.waitForExistence(timeout: 5))
         element.tap()
         XCTAssertTrue(element2.waitForExistence(timeout: 5))
