@@ -35,7 +35,7 @@ final class CheckCreationTests: AlertDismissingTestCase {
         let itemPriceFields = app.textFields.matching(NSPredicate(format: "placeholderValue == %@", "Item Price"))
         let priceTextField = itemPriceFields.element(boundBy: 0)
         XCTAssertTrue(priceTextField.waitForExistence(timeout: 5), "Expected an 'Item Name' text field to appear")
-        enterText("$21", into: priceTextField, in: app, check: "$21.00")
+        enterText("$21.36", into: priceTextField, in: app, check: "$21.36", paste: true)
 
         // Move onto the next page
         tapButton("Continue", in: app)
@@ -111,7 +111,7 @@ final class CheckCreationTests: AlertDismissingTestCase {
         // Verify changes were persisted
         let subtotalButton = app.buttons["Subtotal"]
         XCTAssertTrue(subtotalButton.waitForExistence(timeout: 3), "Expected a 'subtotal' button to appear")
-        let priceOwedLabel = app.staticTexts["$21.00"]
+        let priceOwedLabel = app.staticTexts["$21.36"]
         XCTAssertTrue(priceOwedLabel.waitForExistence(timeout: 5), "Expected '$21.00' to be visible on screen after selecting the contact")
     }
 }

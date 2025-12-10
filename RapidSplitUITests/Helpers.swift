@@ -80,11 +80,17 @@ func enterText(
     into textField: XCUIElement,
     in app: XCUIApplication,
     erasing: Bool = true,
-    check: String? = nil
+    check: String? = nil,
+    paste: Bool = false
 ) {
     // Ensure the text field is hittable and focused
     XCTAssertTrue(textField.waitForExistence(timeout: 5), "Text field did not appear")
     textField.tap()
+
+    // If pasting, prime the pasteboard with the desired text
+    if paste {
+        UIPasteboard.general.string = text
+    }
 
     // Try Select All and replace if there's existing text
     let currentValue = textField.value as? String ?? ""
@@ -94,16 +100,47 @@ func enterText(
         if selectAll.waitForExistence(timeout: 1) {
             selectAll.tap()
             // Typing new text will replace selection
-            textField.typeText(text)
+            if paste {
+                // Use Edit Menu Paste if available, else fallback to keyboard shortcut
+                let pasteItem = app.menuItems["Paste"]
+                if pasteItem.waitForExistence(timeout: 2) {
+                    pasteItem.tap()
+                } else {
+                    app.keys["v"].press(forDuration: 0, thenDragTo: app.keys["v"]) // no-op to anchor
+                    app.typeText("\u{2318}v")
+                }
+            } else {
+                textField.typeText(text)
+            }
         } else {
             // Fallback: send backspace characters rather than tapping the delete key element
             let deleteSequence = String(repeating: "\u{8}", count: currentValue.count)
             textField.typeText(deleteSequence)
-            textField.typeText(text)
+            if paste {
+                // Use Edit Menu Paste if available, else fallback to keyboard shortcut
+                let pasteItem = app.menuItems["Paste"]
+                if pasteItem.waitForExistence(timeout: 2) {
+                    pasteItem.tap()
+                } else {
+                    app.keys["v"].press(forDuration: 0, thenDragTo: app.keys["v"]) // no-op to anchor
+                    app.typeText("\u{2318}v")
+                }
+            } else {
+                textField.typeText(text)
+            }
         }
     } else {
         // No existing text, just type
-        textField.typeText(text)
+        if paste {
+            let pasteItem = app.menuItems["Paste"]
+            if pasteItem.waitForExistence(timeout: 2) {
+                pasteItem.tap()
+            } else {
+                app.typeText("\u{2318}v")
+            }
+        } else {
+            textField.typeText(text)
+        }
     }
 
     // Dismiss keyboard if needed by tapping return when present
