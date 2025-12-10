@@ -48,9 +48,9 @@ func openPhotoInApp(link: String) {
     let image = safari.images.firstMatch
     XCTAssertTrue(image.waitForExistence(timeout: 15), "Image did not load")
 
-    tapButton("More", in: safari)
+    tapButton("More", in: safari, withPrecision: true)
 
-    tapButton("Share", in: safari)
+    tapButton("Share", in: safari, timeout: 6, withPrecision: true)
 
     let rapidSplitButton = safari.descendants(matching: .any)
         .matching(NSPredicate(format: "label == %@", "RapidSplit"))
@@ -197,7 +197,7 @@ func dismissKeyboard(in app: XCUIApplication) {
 }
 
 @MainActor
-func tapButton(_ name: String, in app: XCUIApplication, timeout: TimeInterval = 3) {
+func tapButton(_ name: String, in app: XCUIApplication, timeout: TimeInterval = 3, withPrecision: Bool = false) {
     // Verify button exists
     let button = app.buttons[name]
     XCTAssertTrue(button.waitForExistence(timeout: timeout), "\(name) button didn't appear")
@@ -208,5 +208,10 @@ func tapButton(_ name: String, in app: XCUIApplication, timeout: TimeInterval = 
     let result = XCTWaiter.wait(for: [expectation], timeout: timeout)
     XCTAssertEqual(result, .completed, "\(name) button is not hittable")
 
-    button.tap()
+    if withPrecision {
+        let coord = button.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        coord.tap()
+    } else {
+        button.tap()
+    }
 }
