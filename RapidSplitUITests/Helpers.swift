@@ -50,6 +50,12 @@ func openPhotoInApp(link: String) {
 
     tapButton("More", in: safari, withPrecision: true)
 
+    let dismissRegion = safari.otherElements["PopoverDismissRegion"]
+    if dismissRegion.waitForExistence(timeout: 3) {
+        dismissRegion.tap()
+        return
+    }
+
     tapButton("Share", in: safari, timeout: 6, withPrecision: true)
 
     let rapidSplitButton = safari.descendants(matching: .any)
