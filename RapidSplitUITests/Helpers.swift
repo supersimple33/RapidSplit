@@ -198,7 +198,15 @@ func dismissKeyboard(in app: XCUIApplication) {
 
 @MainActor
 func tapButton(_ name: String, in app: XCUIApplication, timeout: TimeInterval = 3) {
+    // Verify button exists
     let button = app.buttons[name]
     XCTAssertTrue(button.waitForExistence(timeout: timeout), "\(name) button didn't appear")
+
+    // Check the button is hittable
+    let hittablePredicate = NSPredicate(format: "isHittable == true")
+    let expectation = XCTNSPredicateExpectation(predicate: hittablePredicate, object: button)
+    let result = XCTWaiter.wait(for: [expectation], timeout: timeout)
+    XCTAssertEqual(result, .completed, "\(name) button is not hittable")
+
     button.tap()
 }
