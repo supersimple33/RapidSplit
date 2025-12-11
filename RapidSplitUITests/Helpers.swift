@@ -48,7 +48,7 @@ func openPhotoInApp(link: String) {
     let image = safari.images.firstMatch
     XCTAssertTrue(image.waitForExistence(timeout: 15), "Image did not load")
 
-    tapButton("More", in: safari, withPrecision: true)
+    tapButton("More", in: safari)
 
     let dismissRegion = safari.otherElements["PopoverDismissRegion"]
     if dismissRegion.waitForExistence(timeout: 3) {
@@ -56,7 +56,7 @@ func openPhotoInApp(link: String) {
         return
     }
 
-    tapButton("Share", in: safari, timeout: 6, withPrecision: true)
+    tapButton("Share", in: safari, timeout: 6)
 
     let rapidSplitButton = safari.descendants(matching: .any)
         .matching(NSPredicate(format: "label == %@", "RapidSplit"))
