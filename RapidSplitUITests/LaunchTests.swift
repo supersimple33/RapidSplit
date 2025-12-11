@@ -17,11 +17,6 @@ final class LaunchTests: AlertDismissingTestCase {
     override func setUp() async throws {
         try await super.setUp()
         self.continueAfterFailure = false
-
-        // Skip UI performance tests when running in CI to avoid flaky results and long runtimes
-        if IS_RUNNING_CI {
-            throw XCTSkip("Skipping UI performance tests on CI environment.")
-        }
     }
 
     @MainActor
