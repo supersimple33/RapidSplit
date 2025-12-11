@@ -56,6 +56,10 @@ func openPhotoInApp(link: String) {
         return
     }
 
+    if !safari.buttons["Share"].waitForExistence(timeout: 3) {
+        tapButton("More", in: safari)
+    }
+
     tapButton("Share", in: safari, timeout: 6)
 
     let rapidSplitButton = safari.descendants(matching: .any)
