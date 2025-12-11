@@ -14,14 +14,14 @@ final class CheckEditTests: AlertDismissingTestCase {
         try await super.setUp()
         self.continueAfterFailure = false
         seedApp() // Ensure the app is installed and seeded
-
-        if IS_RUNNING_CI {
-            XCTExpectFailure("Tests may not run properly on CI")
-        }
     }
 
     @MainActor
     func testDinnerPartyEditing() throws {
+        if IS_RUNNING_CI {
+            XCTExpectFailure("Tests may not run properly on CI")
+        }
+        
         let app = self.getAppWithEnv()
         app.activate()
         app/*@START_MENU_TOKEN@*/.staticTexts["Name"]/*[[".otherElements.staticTexts[\"Name\"]",".staticTexts[\"Name\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
