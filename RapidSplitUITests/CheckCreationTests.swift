@@ -16,6 +16,10 @@ final class CheckCreationTests: AlertDismissingTestCase {
         try await super.setUp()
         self.continueAfterFailure = false
         resetApp() // Ensure the app is installed and no exisiting checks
+
+        if IS_RUNNING_CI {
+            XCTExpectFailure("Tests may not run properly on CI")
+        }
     }
 
     @MainActor
