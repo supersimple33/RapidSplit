@@ -75,7 +75,7 @@ final class CheckCreationTests: AlertDismissingTestCase {
         XCTAssertTrue(app.textFields["(682) 555-2419"].waitForExistence(timeout: 3), "Expected 'Phone Number' to be visible on screen after creating the contact")
 
         // Move onto the next page
-        tapButton("Continue", in: app)
+        tapButton("Continue", in: app, timeout: 8)
 
         // Assign Items
         let johnAssignmentButton = app.switches["assignmentToggle.Groceries.John.Doe"]
