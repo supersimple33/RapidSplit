@@ -19,6 +19,6 @@ enum LaunchArguments: String {
     case seed = "--seedSwiftData"
 }
 var IS_RUNNING_CI: Bool {
-    return ProcessInfo.processInfo.environment["CI"] != nil
+    return !(ProcessInfo.processInfo.environment["CI"]?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
 }
 #endif
