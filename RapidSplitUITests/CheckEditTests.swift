@@ -19,7 +19,7 @@ final class CheckEditTests: AlertDismissingTestCase {
     @MainActor
     func testDinnerPartyEditing() throws {
         if IS_RUNNING_CI {
-            XCTExpectFailure("Tests may not run properly on CI")
+            XCTExpectFailure("Tests may not run properly on CI", options: .nonStrict())
         }
         
         let app = self.getAppWithEnv()

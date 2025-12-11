@@ -21,9 +21,9 @@ final class CheckCreationTests: AlertDismissingTestCase {
     @MainActor
     func testCheckCreation() throws {
         if IS_RUNNING_CI {
-            XCTExpectFailure("Tests may not run properly on CI")
+            XCTExpectFailure("Tests may not run properly on CI", options: .nonStrict())
         }
-        
+
         let app = self.getAppWithEnv()
         openPhotoInApp(link: IMAGE_LINK)
         app.activate()
