@@ -47,7 +47,6 @@
       }
     },
     {
-      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:RapidSplit.xcodeproj",
         "identifier" : "FE3209C52E6CE0B900A214CA",
