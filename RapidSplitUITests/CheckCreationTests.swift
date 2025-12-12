@@ -15,7 +15,7 @@ final class CheckCreationTests: AlertDismissingTestCase {
     override func setUp() async throws {
         try await super.setUp()
         self.continueAfterFailure = false
-        resetApp() // Ensure the app is installed and no exisiting checks
+        resetApp() // Ensure the app is installed and no existing checks
     }
 
     @MainActor
