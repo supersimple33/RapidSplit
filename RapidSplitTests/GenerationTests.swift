@@ -39,9 +39,7 @@ fileprivate let TEST_CHECKS = [
 
 struct GenerationTests {
 
-    private let options = GenerationOptions(temperature: 0.0)
-
-    @Test("Title Generation", .enabled(if: !IS_RUNNING_IN_CLOUD), arguments: zip(TEST_CHECKS, [
+    @Test("Title Generation", .enabled(if: !IS_RUNNING_CI), arguments: zip(TEST_CHECKS, [
         "McDonald's Meal Order",
         "Sonic Drive-In Feast",
         "Chipotle Meal"
@@ -49,12 +47,11 @@ struct GenerationTests {
     func testGenerateTitle(lines: [String], expectedTitle: String) async throws {
         let title = try await GenerationService.shared.generateCheckTitle(
             recognizedStrings: lines,
-            options: self.options
         )
         #expect(title == expectedTitle)
     }
 
-    @Test("Item Generation", .enabled(if: !IS_RUNNING_IN_CLOUD), arguments: zip(TEST_CHECKS, [
+    @Test("Item Generation", .enabled(if: !IS_RUNNING_CI), arguments: zip(TEST_CHECKS, [
         [
             GeneratedItem(name: "BigMac", price: 5.49, quantity: 1),
             GeneratedItem(name: "McNugget Meal", price: 10.99, quantity: 1),
@@ -89,8 +86,7 @@ struct GenerationTests {
             recognizedStrings: lines,
             onPartial: { partialItems, content in
                 await buffer.append(partialItems)
-            },
-            options: self.options
+            }
         )
 
         let updatesReceived = await buffer.snapshots.count

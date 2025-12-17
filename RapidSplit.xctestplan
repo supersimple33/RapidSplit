@@ -15,9 +15,20 @@
           "containerPath" : "container:RapidSplit.xcodeproj",
           "identifier" : "FE3209AA2E6CE0B800A214CA",
           "name" : "RapidSplit"
+        },
+        {
+          "containerPath" : "container:RapidSplit.xcodeproj",
+          "identifier" : "FE84C9FA2ECD5E3F00BF5919",
+          "name" : "RapidSplitSharing"
         }
       ]
     },
+    "environmentVariableEntries" : [
+      {
+        "key" : "CI",
+        "value" : "$(CI)"
+      }
+    ],
     "performanceAntipatternCheckerEnabled" : true,
     "targetForVariableExpansion" : {
       "containerPath" : "container:RapidSplit.xcodeproj",
@@ -35,7 +46,6 @@
       }
     },
     {
-      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:RapidSplit.xcodeproj",
         "identifier" : "FE3209C52E6CE0B900A214CA",

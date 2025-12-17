@@ -104,7 +104,11 @@ struct AssignmentTable: View {
                         } else {
                             item.removeOrderer(participant)
                         }
-                    })).toggleStyle(CheckboxStyle())
+                    }))
+                    .toggleStyle(CheckboxStyle())
+                    .accessibilityIdentifier(
+                        "assignmentToggle.\(item.name).\(participant.firstName).\(participant.lastName)"
+                    )
                 }
             }
         }

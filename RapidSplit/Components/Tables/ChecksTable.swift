@@ -49,6 +49,7 @@ struct ChecksTable: View {
                 Text(check.createdAt.description).multilineTextAlignment(.trailing)
             }
         }
+            .accessibilityIdentifier("checkRow.\(check.id)")
     }
 
     private func header(ctx: Binding<Context>) -> some View {
@@ -79,5 +80,5 @@ struct ChecksTable: View {
     return ChecksTable(TableOptions(), navigateToCheck: { _ in
         print()
     })
-        .modelContainer(DataController.previewContainer)
+    .modelContainer(DataController.previewContainer)
 }

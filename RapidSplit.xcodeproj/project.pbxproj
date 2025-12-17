@@ -12,8 +12,10 @@
 		FE84CA052ECD5E3F00BF5919 /* RapidSplitSharing.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE84C9FB2ECD5E3F00BF5919 /* RapidSplitSharing.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FE84CA732ECD6F7A00BF5919 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE84CA722ECD6F7A00BF5919 /* Constants.swift */; };
 		FE84CA742ECD6F7A00BF5919 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE84CA722ECD6F7A00BF5919 /* Constants.swift */; };
+		FE99884F2ED4BFD2001132E3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE84CA722ECD6F7A00BF5919 /* Constants.swift */; };
 		FED090A52E71D2F800CC3CC5 /* Tabler in Frameworks */ = {isa = PBXBuildFile; productRef = FED090A42E71D2F800CC3CC5 /* Tabler */; };
 		FED5D7292E8C56FD00A8E9D6 /* MijickCamera in Frameworks */ = {isa = PBXBuildFile; productRef = FED5D7282E8C56FD00A8E9D6 /* MijickCamera */; };
+		FEF8E6952EE34232007C587F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE84CA722ECD6F7A00BF5919 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -377,6 +379,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEF8E6952EE34232007C587F /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,6 +387,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE99884F2ED4BFD2001132E3 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

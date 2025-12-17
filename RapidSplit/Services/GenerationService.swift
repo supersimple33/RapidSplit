@@ -31,6 +31,14 @@ actor GenerationService {
         onPartial: (@Sendable ([GeneratedItem.PartiallyGenerated], GeneratedContent) async -> Void)? = nil,
         options: GenerationOptions = GenerationOptions()
     ) async throws -> [GeneratedItem] {
+#if DEBUG // There are no LLMs available on CI
+        guard !IS_RUNNING_CI else {
+            return [
+                GeneratedItem(name: "Dummy Item", price: 3.50, quantity: 1),
+                GeneratedItem(name: "Test Burger", price: 5.00, quantity: 2),
+            ]
+        }
+#endif
         let session = LanguageModelSession(model: .default, instructions: ITEMS_INSTRUCTIONS)
         let prompt = "Here is the scanned check:\n" + recognizedStrings.joined(separator: "\n")
         let stream = session.streamResponse(to: prompt, generating: [GeneratedItem].self, options: options)
@@ -47,8 +55,13 @@ actor GenerationService {
 
     func generateCheckTitle(
         recognizedStrings: [String],
-        options: GenerationOptions = GenerationOptions()
+        options: GenerationOptions = GenerationOptions(temperature: 0.0)
     ) async throws -> String {
+#if DEBUG // There are no LLMs available on CI
+        guard !IS_RUNNING_CI else {
+            return "Testing Check Title"
+        }
+#endif
         let session = LanguageModelSession(model: .default, instructions: TITLE_INSTRUCTIONS)
         let prompt = "Here is the scanned check, what would be a good name for it?:\n" + recognizedStrings.joined(separator: "\n")
         return try await session

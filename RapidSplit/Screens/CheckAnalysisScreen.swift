@@ -27,6 +27,7 @@ struct CheckAnalysisScreen: View {
         case runningAIAnalysis
         case buildingCheckItems
         case namingCheck
+        case error
 
         var displayTitle: String {
             switch self {
@@ -35,6 +36,7 @@ struct CheckAnalysisScreen: View {
             case .runningAIAnalysis: return "Running AI analysis"
             case .buildingCheckItems: return "Building check items"
             case .namingCheck: return "Naming check"
+            case .error: return "Encountered an error"
             }
         }
     }
@@ -102,7 +104,8 @@ struct CheckAnalysisScreen: View {
             // Finish
             router.navigateTo(route: .overview(title: title, items: items))
         } catch let err {
-            print(err)
+            self.statusUpdates.append("Error: \(err.localizedDescription)")
+            self.phase = .error
             self.snackbarMessage = "Error: \(err.localizedDescription)"
             self.showSnackbar = true
         }
