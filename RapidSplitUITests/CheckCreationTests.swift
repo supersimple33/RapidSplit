@@ -7,7 +7,7 @@
 
 import XCTest
 
-fileprivate let IMAGE_LINK = "https://raw.githubusercontent.com/supersimple33/RapidSplit/refs/heads/test/AddingUITests/RapidSplitUITests/media/check.jpg"
+fileprivate let IMAGE_LINK = "https://github.com/supersimple33/RapidSplit/blob/main/RapidSplitUITests/media/check.jpg?raw=true"
 
 final class CheckCreationTests: AlertDismissingTestCase {
 
