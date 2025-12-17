@@ -109,6 +109,7 @@ struct IdentifyParticipantsScreen: View {
     }
 }
 
+#if DEBUG
 #Preview {
     // Build a context from the preview container
     let container = DataController.previewContainer
@@ -124,3 +125,4 @@ struct IdentifyParticipantsScreen: View {
         .environment(Router())
         .modelContainer(container)
 }
+#endif

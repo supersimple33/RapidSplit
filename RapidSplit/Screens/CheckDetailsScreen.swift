@@ -71,6 +71,7 @@ fileprivate extension View {
     }
 }
 
+#if DEBUG
 #Preview {
     // Build a context from the preview container
     let container = DataController.previewContainer
@@ -86,3 +87,4 @@ fileprivate extension View {
         .environment(Router())
         .modelContainer(container)
 }
+#endif

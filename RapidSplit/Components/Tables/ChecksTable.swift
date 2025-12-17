@@ -76,9 +76,11 @@ struct ChecksTable: View {
     }
 }
 
+#if DEBUG
 #Preview {
     return ChecksTable(TableOptions(), navigateToCheck: { _ in
         print()
     })
     .modelContainer(DataController.previewContainer)
 }
+#endif

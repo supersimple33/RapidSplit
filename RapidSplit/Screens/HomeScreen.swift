@@ -30,8 +30,10 @@ struct HomeScreen: View {
     }
 }
 
+#if DEBUG
 #Preview {
     return HomeScreen()
         .environment(Router())
         .modelContainer(DataController.previewContainer)
 }
+#endif

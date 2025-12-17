@@ -37,6 +37,7 @@ struct InitialsIcon: View {
     }
 }
 
+#if DEBUG
 #Preview {
     // Build a context from the preview container
     let container = DataController.previewContainer
@@ -51,3 +52,4 @@ struct InitialsIcon: View {
     return InitialsIcon(participant: participant, size: 48)
         .modelContainer(container)
 }
+#endif
